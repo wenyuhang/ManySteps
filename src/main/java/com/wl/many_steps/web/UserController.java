@@ -3,14 +3,16 @@ package com.wl.many_steps.web;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.wl.many_steps.model.ApiResponse;
+import com.wl.many_steps.pojo.Bean;
 import com.wl.many_steps.pojo.User;
 import com.wl.many_steps.service.UserService;
 import org.apache.http.util.TextUtils;
+import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.Max;
 import java.util.List;
 
 /**
@@ -21,22 +23,17 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/userinfo")
+@Validated
 public class UserController {
 
     @Autowired
     UserService userService;
 
     @RequestMapping(value = "/userRegister",method = RequestMethod.POST)
-    public ApiResponse register(String name,String headimgurl,String openid,String unionid,String phone){
-        if (TextUtils.isEmpty(name)){
-            return ApiResponse.of(999,"name参数不能为空",null);
-        }
-        if (TextUtils.isEmpty(headimgurl)){
-            return ApiResponse.of(999,"headimgurl参数不能为空",null);
-        }
-        if (TextUtils.isEmpty(openid)){
-            return ApiResponse.of(999,"openid参数不能为空",null);
-        }
+    public ApiResponse register(@NotBlank(message = "name 不能为空") String name,
+                                @NotBlank(message = "headimgurl 不能为空") String headimgurl,
+                                @NotBlank(message = "openid 不能为空") String openid,
+                                @NotBlank(message = "unionid 不能为空") String unionid,String phone){
 
         //检测用户是否注册
         User user = userService.get(openid);
@@ -71,5 +68,16 @@ public class UserController {
     @RequestMapping(value = "/hello")
     public String hello(){
         return "hello world";
+    }
+
+    @GetMapping("/getUser")
+    public String getUserStr(@NotBlank(message = "name 不能为空") String name,
+                             @NotBlank(message = "age 不能为空")@Max(value = 99, message = "不能大于99岁") String age) {
+        return "name: " + name + " ,age:" + age;
+    }
+
+    @PostMapping("/addUser")
+    public String getUserStr(@Validated @RequestBody Bean user) {
+        return "name: " + user.getName() + ", age:" + user.getSex();
     }
 }
