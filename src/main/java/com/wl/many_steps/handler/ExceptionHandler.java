@@ -83,7 +83,7 @@ public class ExceptionHandler {
                 StringBuilder msgBuilder = new StringBuilder();
                 for (ConstraintViolation<?> item : violations) {
                     //打印验证不通过的信息
-                    System.out.println(item.getMessage());
+//                    System.out.println(item.getMessage());
                     msgBuilder.append(item.getMessage()).append(",");
                 }
                 String errorMessage = msgBuilder.toString();
@@ -93,7 +93,7 @@ public class ExceptionHandler {
                 log.error("【ConstraintViolationException】:{}", errorMessage);
                 return ApiResponse.of(999, errorMessage, null);
             }
-        System.out.println("【ConstraintViolationException】" + exception.getMessage());
+//        System.out.println("【ConstraintViolationException】" + exception.getMessage());
         return ApiResponse.of(999, exception.getMessage(), null);
     }
 
@@ -118,7 +118,7 @@ public class ExceptionHandler {
             log.error("【MethodArgumentNotValidException】:{}", errorMessage);
             return ApiResponse.of(999, errorMessage, null);
         }
-        System.out.println("【MethodArgumentNotValidException】" + ex.getMessage());
+//        System.out.println("【MethodArgumentNotValidException】" + ex.getMessage());
         return ApiResponse.of(999, ex.getMessage(), null);
     }
 
