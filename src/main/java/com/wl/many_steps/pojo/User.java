@@ -29,9 +29,11 @@ public class User {
 
     private String phone;
 
-    private String createdate;
-
     private int steps_total;
 
+    private int coin_total;
+
     private float energy_total;
+
+    private String createdate;
 }

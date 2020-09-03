@@ -19,6 +19,7 @@ import javax.validation.constraints.Min;
 @Setter
 public class Product {
 
+    @Min(value = 1,message = "id 参数不能小于1")
     private int id;
 
     private String name;
@@ -37,7 +38,4 @@ public class Product {
 
     private String createdate;
 
-//    @Transient
-//    @JsonBackReference
-//    private MultipartFile multipartFile;
 }

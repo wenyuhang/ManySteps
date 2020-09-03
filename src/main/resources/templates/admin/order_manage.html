@@ -1,0 +1,169 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="/include/adminHeader::html">
+    <title>hello</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+</head>
+<body>
+<div th:replace="/include/adminNavigator::html"></div>
+<script>
+    $(function () {
+        var data4Vue = {
+            beans: [],
+            bean: {
+                id: 0,
+                name: '',
+                coin: 0,
+                price: 99.98,
+                stock: 0,
+                subTitle: '',
+                imageurl: '',
+                convertsteps: 0,
+                createdate: '',
+            },
+            pagination: {},
+        };
+
+        var vue = new Vue({
+            el: '#workingArea',
+            data: data4Vue,
+            mounted: function () {
+                this.list(1);
+            },
+            methods: {
+                // 查询商品列表
+                list: function (start) {
+                    var url = "../steps/product/productList"
+                    axios.post(url, {page: start, size: 10}).then(function (response) {
+                        // var jsonObject = response.data.data;
+                        // var jsonString = JSON.stringify(jsonObject)
+                        // document.getElementById("hero").innerHTML = "通过 axios 获取到的json数据：" + jsonString;
+                        vue.pagination = response.data.data;
+                        vue.beans = response.data.data.list;
+                    })
+                },
+                // 删除商品
+                deleteBean: function (id) {
+                    if (!checkDeleteLink())
+                        return;
+                    var url = "../steps/product/deleteProduct"
+                    let data = new FormData();
+                    data.append("id", id);
+                    axios.post(url, data).then(function (response) {
+                        alert(response.data.message);
+                        if (200 == response.data.code) {
+                            vue.list(1);
+                        }
+                    });
+                },
+                //添加商品
+                add: function () {
+                    if(!checkEmpty(this.bean.name, "产品名称"))
+                        return;
+                    if (!checkInt(this.bean.coin, "产品金币"))
+                        return;
+                    if (!checkNumber(this.bean.price, "产品价格"))
+                        return;
+                    if (!checkInt(this.bean.stock, "产品库存"))
+                        return;
+                    if (!checkEmpty(this.bean.subTitle, "产品标签"))
+                        return;
+
+                    var url = "../steps/product/addProduct"
+                    let data = new FormData();
+                    data.append("name", this.bean.name);
+                    data.append("coin", this.bean.coin);
+                    data.append("price", this.bean.price);
+                    data.append("stock", this.bean.stock);
+                    data.append("subTitle", this.bean.subTitle);
+                    axios.post(url,data).then(function(response){
+                        alert(response.data.message);
+                        if (200 == response.data.code) {
+                            //刷新列表
+                            vue.list(0);
+                            //清空输入框数据
+                            $("#singlePic").val('');
+                            vue.bean =  {id:0,name:'','coin':0,'price':99.98,'stock':99,'subTitle':'',imagefile:null};
+                        }
+
+                    });
+                },
+                jump: function(page){
+                    jump(page,vue); //
+                },
+                jumpByNumber: function(start){
+                    jumpByNumber(start,vue);
+                }
+            }
+        })
+
+
+    })
+
+
+</script>
+
+<div id="workingArea">
+    <!--<ol class="breadcrumb">-->
+    <!--<li><a href="admin_category_list"></a></li>-->
+    <!--<li><a :href="'admin_product_list?cid='+category.id">{{category.name}}</a></li>-->
+    <!--<li class="active"></li>-->
+    <!--</ol>-->
+
+    <div id="hero">
+
+    </div>
+    <div class="listDataTableDiv">
+        <table class="table table-striped table-bordered table-hover table-condensed">
+            <thead>
+            <tr class="success">
+                <th>ID</th>
+                <th>图片</th>
+                <th>产品名称</th>
+                <th>金币</th>
+                <th width="53px">价格</th>
+                <th width="80px">库存</th>
+                <th width="80px">标签</th>
+                <th width="80px">创建时间</th>
+                <th>订单</th>
+                <th>编辑</th>
+                <th>删除</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="bean in beans ">
+                <td>{{bean.id}}</td>
+                <td>
+                    <img v-if="null != bean.imageurl" width="40px" :src="bean.imageurl">
+                </td>
+                <td>{{bean.name}}</td>
+                <td>{{bean.coin}}</td>
+                <td>{{bean.price}}</td>
+                <td>{{bean.stock}}</td>
+                <td>{{bean.subTitle}}</td>
+                <td>{{bean.createdate}}</td>
+
+                <td>
+                    <a :href="'admin_product_order?id=' + bean.id "><span
+                            class="glyphicon glyphicon-shopping-cart"></span></a>
+                </td>
+                <td>
+                    <a :href="'admin_product_edit?id=' + bean.id "><span class="glyphicon glyphicon-edit"></span></a>
+                </td>
+                <td>
+                    <a href="#nowhere" @click="deleteBean(bean.id)"><span class=" glyphicon glyphicon-trash"></span></a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div th:replace="include/adminPage::html" ></div>
+
+</div>
+
+<div th:replace="include/adminFooter::html"></div>
+</body>
+
+</html>

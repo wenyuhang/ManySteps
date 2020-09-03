@@ -1,24 +1,24 @@
 <div class="pageDiv" th:fragment="html" xmlns:th="http://www.w3.org/1999/xhtml">
     <nav>
         <ul class="pagination">
-            <li :class="{ disabled: pagination.first }">
-                <a  href="#nowhere" @click="jump('first')"></a>
+            <li :class="{ disabled: pagination.isFirstPage }">
+                <a  href="#nowhere" @click="jump('firstPage')">«</a>
             </li>
-            <li :class="{ disabled: !pagination.hasPrevious }">
-                <a  href="#nowhere" @click="jump('pre')"></a>
+            <li :class="{ disabled: !pagination.hasPreviousPage }">
+                <a  href="#nowhere" @click="jump('prePage')">‹</a>
             </li>
 
             <li  v-for="i in pagination.navigatepageNums">
-                <a href="#nowhere" @click="jumpByNumber(i-1)" >
+                <a href="#nowhere" @click="jumpByNumber(i)" >
                     {{i}}
                 </a>
             </li>
 
-            <li :class="{ disabled: !pagination.hasNext }">
-                <a  href="#nowhere" @click="jump('next')"></a>
+            <li :class="{ disabled: !pagination.hasNextPage }">
+                <a  href="#nowhere" @click="jump('nextPage')">›</a>
             </li>
-            <li :class="{ disabled: pagination.last }">
-                <a  href="#nowhere" @click="jump('last')"></a>
+            <li :class="{ disabled: pagination.isLastPage }">
+                <a  href="#nowhere" @click="jump('lastPage')">»</a>
             </li>
         </ul>
     </nav>

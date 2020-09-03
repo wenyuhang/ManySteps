@@ -14,7 +14,7 @@ import javax.validation.constraints.Min;
  */
 @Data
 public class PageBean {
-    @Min(value = 0,message = "page 参数不能小于0")
+    @Min(value = 1,message = "page 参数不能小于1")
     private int page;
 
     @Min(value = 1,message = "size 参数不能小于1")

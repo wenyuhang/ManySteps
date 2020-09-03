@@ -40,21 +40,21 @@ public class ProductController {
 
     /**
      * 添加商品
+     *
      * @return
      */
-    @RequestMapping(value = "/addProduct",method = RequestMethod.POST)
+    @RequestMapping(value = "/addProduct", method = RequestMethod.POST)
     public ApiResponse add(@NotBlank(message = "name 不能为空") String name,
-                           @NotBlank(message = "coin 不能为空")@Min(value = 0,message = "coin 不能小于0") String coin,
-                           @NotBlank(message = "price 不能为空")@Min(value = 0,message = "price 不能小于0") String price,
-                           @NotBlank(message = "stock 不能为空")@Min(value = 0,message = "stock 不能小于0") String stock,
+                           @NotBlank(message = "coin 不能为空") @Min(value = 0, message = "coin 不能小于0") String coin,
+                           @NotBlank(message = "price 不能为空") @Min(value = 0, message = "price 不能小于0") String price,
+                           @NotBlank(message = "stock 不能为空") @Min(value = 0, message = "stock 不能小于0") String stock,
                            @NotBlank(message = "subTitle 不能为空") String subTitle,
-                           @NotBlank(message = "convertsteps 不能为空")@Min(value = 0,message = "convertsteps 不能小于0") String convertsteps,
-                           MultipartFile image, HttpServletRequest request){
+                           MultipartFile image, HttpServletRequest request) {
 
         //查询是否存在相同名称商品
         Product product = productService.get(name);
-        if (null!=product){
-            return ApiResponse.of(999,"该商品已存在",null);
+        if (null != product) {
+            return ApiResponse.of(999, "该商品已存在", null);
         }
         //校验image
         if (image.isEmpty() || image.getSize() <= 0) {
@@ -72,28 +72,103 @@ public class ProductController {
         product.setStock(Integer.parseInt(stock));
         product.setSubTitle(subTitle);
         product.setImageurl(imagePath);
-        product.setConvertsteps(Integer.parseInt(convertsteps));
+        product.setConvertsteps(0);
         product.setCreatedate(String.valueOf(System.currentTimeMillis()));
         int pid = productService.add(product);
         return ApiResponse.ofSuccess(product);
     }
+
+    /**
+     * 删除商品
+     *
+     * @param id 商品id
+     * @return
+     */
+    @RequestMapping(value = "/deleteProduct", method = RequestMethod.POST)
+    public ApiResponse delete(@NotBlank(message = "id 不能为空") @Min(value = 0, message = "id 不能小于0") String id, HttpServletRequest request) {
+        //查询是否存在相同名称商品
+        Product product = productService.get(Integer.parseInt(id));
+        if (null == product) {
+            return ApiResponse.of(999, "该商品不存在", null);
+        }
+        productService.delete(Integer.parseInt(id));
+        //删除商品图片
+        deleteImageFile(product.getImageurl().replace("img/product/", ""), request);
+        return ApiResponse.ofMessage("删除成功");
+    }
+
+    /**
+     * 修改商品
+     *
+     * @return
+     */
+    @RequestMapping(value = "/updateProduct", method = RequestMethod.POST)
+    public ApiResponse update(@NotBlank(message = "id 不能为空") @Min(value = 0, message = "id 不能小于0") String id,
+                              @NotBlank(message = "name 不能为空") String name,
+                              @NotBlank(message = "coin 不能为空") @Min(value = 0, message = "coin 不能小于0") String coin,
+                              @NotBlank(message = "price 不能为空") @Min(value = 0, message = "price 不能小于0") String price,
+                              @NotBlank(message = "stock 不能为空") @Min(value = 0, message = "stock 不能小于0") String stock,
+                              @NotBlank(message = "subTitle 不能为空") String subTitle,
+                              MultipartFile image, HttpServletRequest request) {
+        //查询是否存在相同名称商品
+        Product product = productService.get(Integer.parseInt(id));
+        if (null == product) {
+            return ApiResponse.of(999, "该商品不存在，请修改后重试", null);
+        }
+        //校验image
+        if (null!=image && !image.isEmpty() && image.getSize() > 0) {
+            String imagePath = saveOrUpdateImageFile(image, request);
+            if (TextUtils.isEmpty(imagePath)) {
+                return ApiResponse.of(999, "图片文件处理失败，请重试", null);
+            }
+            //删除之前的图片
+            deleteImageFile(product.getImageurl().replace("img/product/", ""), request);
+            product.setImageurl(imagePath);
+        }
+        product.setName(name);
+        product.setCoin(Integer.parseInt(coin));
+        product.setPrice(Float.parseFloat(price));
+        product.setStock(Integer.parseInt(stock));
+        product.setSubTitle(subTitle);
+        product.setCreatedate(String.valueOf(System.currentTimeMillis()));
+
+        int updata = productService.updata(product);
+        return ApiResponse.ofSuccess(product);
+    }
+
     /**
      * 获取商品列表
+     *
      * @param pageBean
      * @return
      */
-    @RequestMapping(value = "/productList",method = RequestMethod.POST)
-    public ApiResponse list(@Validated @RequestBody PageBean pageBean){
-        PageHelper.startPage(pageBean.getPage(),pageBean.getSize());
+    @RequestMapping(value = "/productList", method = RequestMethod.POST)
+    public ApiResponse list(@Validated @RequestBody PageBean pageBean) {
+        PageHelper.startPage(pageBean.getPage(), pageBean.getSize());
         List<Product> list = productService.list();
-        System.out.println("list is size:"+list.size());
-        PageInfo pageInfo=new PageInfo(list);
+        PageInfo pageInfo = new PageInfo(list);
         return ApiResponse.ofSuccess(pageInfo);
     }
+
+    /**
+     * 根据id获取商品
+     * @param bean
+     * @return
+     */
+    @RequestMapping(value = "/getProduct", method = RequestMethod.POST)
+    public ApiResponse list(@Validated @RequestBody Product bean) {
+        Product product = productService.get(bean.getId());
+        if (null == product) {
+            return ApiResponse.of(999, "该商品不存在，请修改后重试", null);
+        }
+        return ApiResponse.ofSuccess(product);
+    }
+
 
 
     /**
      * 保存图片
+     *
      * @param image
      * @param request
      * @return
@@ -102,7 +177,7 @@ public class ProductController {
         String filePath = null;
         try {
             File imageFolder = new File(request.getServletContext().getRealPath("img/product"));
-            File file = new File(imageFolder,    System.currentTimeMillis() + ".jpg");
+            File file = new File(imageFolder, System.currentTimeMillis() + ".jpg");
             if (!file.getParentFile().exists())
                 file.getParentFile().mkdirs();
             image.transferTo(file);
@@ -118,6 +193,7 @@ public class ProductController {
 
     /**
      * 删除图片
+     *
      * @param path
      * @param request
      * @return

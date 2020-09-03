@@ -30,6 +30,41 @@ public class ProductService {
     }
 
     /**
+     * 删除商品
+     * @param id
+     */
+    public void delete(int id){
+        productMapper.delete(id);
+    }
+
+    /**
+     * 修改商品
+     * @param product
+     * @return
+     */
+    public int updata(Product product){
+        return productMapper.update(product);
+    }
+
+    /**
+     * 根据id值获取商品
+     * @param id
+     * @return
+     */
+    public Product get(int id){
+        Product product = null;
+        try {
+            product = productMapper.get(id);
+            if (null==product|| TextUtils.isEmpty(product.getName())){
+                product = null;
+            }
+        }catch (Exception e){
+            product = null;
+        }
+        return product;
+    }
+
+    /**
      * 根据名称获取商品
      * @param name
      * @return

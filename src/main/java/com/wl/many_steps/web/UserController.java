@@ -4,6 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.wl.many_steps.model.ApiResponse;
 import com.wl.many_steps.pojo.Bean;
+import com.wl.many_steps.pojo.PageBean;
 import com.wl.many_steps.pojo.User;
 import com.wl.many_steps.service.UserService;
 import org.apache.http.util.TextUtils;
@@ -57,10 +58,9 @@ public class UserController {
 
 
     @RequestMapping(value = "/userList",method = RequestMethod.POST)
-    public ApiResponse list(){
-        PageHelper.startPage(1,10);
+    public ApiResponse list(@Validated @RequestBody PageBean pageBean){
+        PageHelper.startPage(pageBean.getPage(),pageBean.getSize());
         List<User> list = userService.list();
-        System.out.println("list is size:"+list.size());
         PageInfo pageInfo=new PageInfo(list);
         return ApiResponse.ofSuccess(pageInfo);
     }

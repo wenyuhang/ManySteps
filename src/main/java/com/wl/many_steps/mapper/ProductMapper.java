@@ -21,14 +21,15 @@ public interface ProductMapper {
     @Delete(" delete from product where id= #{id} ")
     void delete(int id);
 
+    @Update("update product set name=#{product.name},coin=#{product.coin},price=#{product.price},stock=#{product.stock},subTitle=#{product.subTitle}," +
+            "imageurl=#{product.imageurl},convertsteps=#{product.convertsteps},createdate=#{product.createdate} where id=#{product.id} ")
+    int update(@Param("product") Product product);
+
     @Select("select * from product where id= #{id} ")
     Product get(int id);
 
     @Select("select * from product where name= #{name} ")
     Product getByName(String name);
-
-    @Update("update product set name=#{name} where id=#{id} ")
-    int update(Product product);
 
     @Select(" select * from product ")
     List<Product> list();
