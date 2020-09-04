@@ -29,9 +29,9 @@ import java.util.List;
  * date   : 2020/9/1 15:23
  * desc   : 商品管理
  */
+@Validated
 @RestController
 @RequestMapping(value = "product")
-@Validated
 public class ProductController {
 
     @Autowired
@@ -67,14 +67,17 @@ public class ProductController {
         //创建商品对象
         product = new Product();
         product.setName(name);
-        product.setCoin(Integer.parseInt(coin));
+        product.setCoin(Float.parseFloat(coin));
         product.setPrice(Float.parseFloat(price));
         product.setStock(Integer.parseInt(stock));
         product.setSubTitle(subTitle);
         product.setImageurl(imagePath);
         product.setConvertsteps(0);
         product.setCreatedate(String.valueOf(System.currentTimeMillis()));
-        int pid = productService.add(product);
+        int code = productService.add(product);
+        if (code==0){
+            return ApiResponse.of(999,"操作失败请重试",null);
+        }
         return ApiResponse.ofSuccess(product);
     }
 
@@ -126,13 +129,16 @@ public class ProductController {
             product.setImageurl(imagePath);
         }
         product.setName(name);
-        product.setCoin(Integer.parseInt(coin));
+        product.setCoin(Float.parseFloat(coin));
         product.setPrice(Float.parseFloat(price));
         product.setStock(Integer.parseInt(stock));
         product.setSubTitle(subTitle);
         product.setCreatedate(String.valueOf(System.currentTimeMillis()));
 
-        int updata = productService.updata(product);
+        int code = productService.updata(product);
+        if (code==0){
+            return ApiResponse.of(999,"操作失败请重试",null);
+        }
         return ApiResponse.ofSuccess(product);
     }
 

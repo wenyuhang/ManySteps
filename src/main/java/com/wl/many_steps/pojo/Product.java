@@ -24,7 +24,7 @@ public class Product {
 
     private String name;
 
-    private int coin;
+    private float coin;
 
     private float price;
 

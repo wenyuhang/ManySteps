@@ -4,8 +4,8 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.wl.many_steps.model.ApiResponse;
 import com.wl.many_steps.pojo.PageBean;
-import com.wl.many_steps.pojo.StepsRecord;
-import com.wl.many_steps.service.StepsRecordService;
+import com.wl.many_steps.pojo.StepsCoin;
+import com.wl.many_steps.service.StepsCoinService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,9 +25,9 @@ import java.util.List;
 @Validated
 @RestController
 @RequestMapping("/userinfo")
-public class StepsRecordController {
+public class StepsCoinController {
     @Autowired
-    StepsRecordService stepsRecordService;
+    StepsCoinService stepsCoinService;
 //    @Autowired
 //    UserService userService;
 //
@@ -114,14 +114,14 @@ public class StepsRecordController {
 //    }
 
     /**
-     * 获取用户步数记录
+     * 获取用户金币兑换记录
      * @param pageBean
      * @return
      */
-    @RequestMapping(value = "/stepsRecord", method = RequestMethod.POST)
+    @RequestMapping(value = "/stepsCoinConvert", method = RequestMethod.POST)
     public ApiResponse list(@Validated @RequestBody PageBean pageBean) {
         PageHelper.startPage(pageBean.getPage(), pageBean.getSize());
-        List<StepsRecord> list = stepsRecordService.list(pageBean.getId());
+        List<StepsCoin> list = stepsCoinService.list(pageBean.getId());
         PageInfo pageInfo = new PageInfo(list);
         return ApiResponse.ofSuccess(pageInfo);
     }

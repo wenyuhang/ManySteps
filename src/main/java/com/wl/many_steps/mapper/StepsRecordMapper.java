@@ -1,6 +1,11 @@
 package com.wl.many_steps.mapper;
 
 
+import com.wl.many_steps.pojo.StepsRecord;
+import org.apache.ibatis.annotations.*;
+
+import java.util.List;
+
 /**
  * author : WYH
  * e-mail : wenyuhang@qinjia001.com
@@ -8,6 +13,23 @@ package com.wl.many_steps.mapper;
  * desc   :
  */
 public interface StepsRecordMapper {
+    @Insert("insert into stepsrecord (uid,steps,rundate,convertedsteps,createdate) " +
+            "values (#{sr.uid},#{sr.steps},#{sr.rundate},#{sr.convertedsteps},#{sr.createdate}) ")
+    @Options(useGeneratedKeys=true, keyProperty="sr.id", keyColumn="id")
+    int add(@Param("sr") StepsRecord sr);
 
+    @Delete(" delete from stepsrecord where id= #{id} ")
+    void delete(int id);
 
+    @Update("update stepsrecord set uid=#{sr.uid},coin=#{sr.steps},price=#{sr.rundate},stock=#{sr.convertedsteps},subTitle=#{sr.createdate} where id=#{sr.id} ")
+    int update(@Param("sr") StepsRecord sr);
+
+    @Select("select * from stepsrecord where id= #{id} ")
+    StepsRecord get(int id);
+
+    @Select(" select * from stepsrecord")
+    List<StepsRecord> list();
+
+    @Select(" select * from stepsrecord where uid = #{uid}")
+    List<StepsRecord> listByUser(int uid);
 }

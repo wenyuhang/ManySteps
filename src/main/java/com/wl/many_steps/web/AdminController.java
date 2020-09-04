@@ -72,4 +72,22 @@ public class AdminController {
     public String listOrder(){
         return "admin/order_manage";
     }
+
+    /**
+     * 用户步数记录
+     * @return
+     */
+    @RequestMapping("/admin_steps_record_list")
+    public String stepsRecord(){
+        return "admin/user_steps_record";
+    }
+
+    /**
+     * 用户步数兑换金币记录
+     * @return
+     */
+    @RequestMapping("/admin_steps_coin_list")
+    public String stepsCoinConverrt(){
+        return "admin/user_stepscoin_convert";
+    }
 }

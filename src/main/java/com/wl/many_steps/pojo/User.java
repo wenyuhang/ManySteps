@@ -31,7 +31,7 @@ public class User {
 
     private int steps_total;
 
-    private int coin_total;
+    private float coin_total;
 
     private float energy_total;
 

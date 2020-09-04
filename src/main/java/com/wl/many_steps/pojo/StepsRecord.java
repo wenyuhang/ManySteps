@@ -16,11 +16,13 @@ public class StepsRecord {
 
     private int id;
 
-    private User user;
+    private int uid;
 
     private int steps;
 
-    private String createdate;
+    private String rundate;
 
-    private int convertsteps;
+    private int convertedsteps;
+
+    private String createdate;
 }

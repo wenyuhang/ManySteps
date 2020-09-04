@@ -20,4 +20,6 @@ public class PageBean {
     @Min(value = 1,message = "size 参数不能小于1")
     @Max(value = 50,message = "size 参数不能大于50")
     private int size;
+
+    private int id;
 }

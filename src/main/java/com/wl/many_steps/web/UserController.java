@@ -3,7 +3,6 @@ package com.wl.many_steps.web;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.wl.many_steps.model.ApiResponse;
-import com.wl.many_steps.pojo.Bean;
 import com.wl.many_steps.pojo.PageBean;
 import com.wl.many_steps.pojo.User;
 import com.wl.many_steps.service.UserService;
@@ -22,9 +21,9 @@ import java.util.List;
  * date   : 2020/8/17 15:46
  * desc   :
  */
+@Validated
 @RestController
 @RequestMapping("/userinfo")
-@Validated
 public class UserController {
 
     @Autowired
@@ -50,8 +49,10 @@ public class UserController {
             if (!TextUtils.isEmpty(phone)){
                 user.setPhone(phone);
             }
-           int id = userService.add(user);
-            System.out.println("====>"+id);
+           int code = userService.add(user);
+            if (code==0){
+                return ApiResponse.of(999,"操作失败请重试",null);
+            }
         }
         return ApiResponse.ofSuccess(user);
     }
@@ -76,8 +77,4 @@ public class UserController {
         return "name: " + name + " ,age:" + age;
     }
 
-    @PostMapping("/addUser")
-    public String getUserStr(@Validated @RequestBody Bean user) {
-        return "name: " + user.getName() + ", age:" + user.getSex();
-    }
 }

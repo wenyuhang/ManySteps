@@ -11,21 +11,9 @@
     $(function () {
         var data4Vue = {
             beans: [],
-            bean: {
-                // id: 0,
-                // name: '',
-                // headimgurl: '',
-                // openid: '',
-                // unionid: '',
-                // session_key: '',
-                // access_token: '',
-                // phone:'',
-                // steps_total: 0,
-                // coin_total:0,
-                // energy_total:0,
-                // createdate: ''
-            },
+            bean: {},
             pagination: {},
+            username:'test'
         };
 
         var vue = new Vue({
@@ -35,15 +23,18 @@
                 this.list(1);
             },
             methods: {
-                // 查询用户列表
+                // 查询用户步数记录
                 list: function (start) {
-                    var url = "../steps/userinfo/userList"
-                    axios.post(url, {page: start, size: 10}).then(function (response) {
+                    var id = getUrlParms("id");
+                    var name = getUrlParms("name");
+                    var url = "../steps/userinfo/stepsRecord"
+                    axios.post(url, {page: start, size: 10,id:id}).then(function (response) {
                         // var jsonObject = response.data.data;
                         // var jsonString = JSON.stringify(jsonObject)
                         // document.getElementById("hero").innerHTML = "通过 axios 获取到的json数据：" + jsonString;
                         vue.pagination = response.data.data;
                         vue.beans = response.data.data.list;
+                        vue.username = name;
                     })
                 },
                 jump: function(page){
@@ -76,47 +67,25 @@
             <thead>
             <tr class="success">
                 <th>ID</th>
-                <th>名称</th>
-                <th>头像</th>
-                <th>手机号</th>
-                <th>步数总量</th>
-                <th>金币总量</th>
-                <th>订单</th>
+                <th>用户</th>
+                <th>步数</th>
+                <th>运动日期</th>
+                <th>转换步数</th>
                 <th>创建时间</th>
             </tr>
             </thead>
             <tbody>
             <tr v-for="bean in beans ">
-
                 <td>{{bean.id}}</td>
-
-                <td>{{bean.name}}</td>
-
-                <td>
-                    <img v-if="null != bean.headimgurl" width="40px" :src="bean.headimgurl">
-                </td>
-
-                <td>{{bean.phone}}</td>
-
-                <td>
-                    <a :href="'admin_steps_record_list?id=' + bean.id +'&name='+bean.name">{{bean.steps_total}}</a>
-                </td>
-
-                <td>
-                    <a :href="'admin_steps_coin_list?id=' + bean.id +'&name='+bean.name">{{bean.coin_total}}</a>
-                </td>
-
-                <td>
-                    <a :href="'admin_order_list?id=' + bean.id "><span class="glyphicon glyphicon-shopping-cart"></span></a>
-                </td>
-
+                <td>{{username}}</td>
+                <td>{{bean.steps}}</td>
+                <td>{{bean.rundate}}</td>
+                <td>{{bean.convertedsteps}}</td>
                 <td>{{bean.createdate}}</td>
-
             </tr>
             </tbody>
         </table>
     </div>
-
     <div th:replace="include/adminPage::html" ></div>
 
 </div>

@@ -12,23 +12,21 @@ import javax.persistence.*;
  * date   : 2020/8/17 15:23
  * desc   :
  */
-//@Getter
-//@Setter
-//@Entity
-//@Table(name = "stepscoin")
-//@JsonIgnoreProperties(value = {"handler","hibernateLazyInitializer","category"})
+@Getter
+@Setter
 public class StepsCoin {
 
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    @Column(name = "id")
-//    private int id;
-//
-//    private User user;
-//
-//    @Column(name = "coin")
-//    private float coin;
-//
-//    @Column(name = "createdate")
-//    private String createdate;
+    private int id;
+
+    private int uid;
+
+    private float coin;
+
+    private String rundate;
+
+    private int convertsteps;
+
+    private String createdate;
+
+
 }

@@ -1,7 +1,7 @@
 package com.wl.many_steps.service;
 
-import com.wl.many_steps.mapper.StepsRecordMapper;
-import com.wl.many_steps.pojo.StepsRecord;
+import com.wl.many_steps.mapper.StepsCoinMapper;
+import com.wl.many_steps.pojo.StepsCoin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,17 +14,17 @@ import java.util.List;
  * desc   :
  */
 @Service
-public class StepsRecordService{
+public class StepsCoinService {
     @Autowired
-    StepsRecordMapper stepsRecordMapper;
+    StepsCoinMapper stepsCoinMapper;
 
     /**
      * 添加步数记录
-     * @param stepsRecord
+     * @param stepsCoin
      * @return
      */
-    public int add(StepsRecord stepsRecord){
-        int save = stepsRecordMapper.add(stepsRecord);
+    public int add(StepsCoin stepsCoin){
+        int save = stepsCoinMapper.add(stepsCoin);
         return save;
     }
 
@@ -33,16 +33,16 @@ public class StepsRecordService{
      * @param id
      */
     public void delete(int id){
-        stepsRecordMapper.delete(id);
+        stepsCoinMapper.delete(id);
     }
 
     /**
      * 更新步数记录
-     * @param stepsRecord
+     * @param stepsCoin
      * @return
      */
-    public int update(StepsRecord stepsRecord){
-        int save = stepsRecordMapper.update(stepsRecord);
+    public int update(StepsCoin stepsCoin){
+        int save = stepsCoinMapper.update(stepsCoin);
         return save;
     }
 
@@ -51,8 +51,8 @@ public class StepsRecordService{
      * @param createdate 以天为单位做计算
      * @return
      */
-    public StepsRecord get(int uid,String createdate){
-        StepsRecord stepsRecord = null;
+    public StepsCoin get(int uid,String createdate){
+        StepsCoin stepsRecord = null;
 //        try {
 //            stepsRecord = stepsRecordDAO.findByUserAndCreatedate(user,createdate);
 //            if (null==stepsRecord|| TextUtils.isEmpty(stepsRecord.getCreatedate())){
@@ -69,8 +69,8 @@ public class StepsRecordService{
      * @param id
      * @return
      */
-    public List<StepsRecord> list(int id){
-        return stepsRecordMapper.listByUser(id);
+    public List<StepsCoin> list(int id){
+        return stepsCoinMapper.listByUser(id);
     }
 
 }
