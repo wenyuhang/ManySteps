@@ -22,17 +22,20 @@ DROP TABLE IF EXISTS `address`;
 
 CREATE TABLE `address` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `uid` int(11) DEFAULT NULL,
-  `receiver` varchar(20) DEFAULT NULL,
-  `mobile` varchar(20) DEFAULT NULL,
-  `post` varchar(20) DEFAULT NULL,
-  `createdate` varchar(20) DEFAULT NULL,
+  `uid` int(11) DEFAULT NULL COMMENT '用户id',
+  `receiver` varchar(20) DEFAULT NULL COMMENT '联系人信息',
+  `mobile` varchar(20) DEFAULT NULL COMMENT '手机号',
+  `post` varchar(20) DEFAULT NULL COMMENT '邮编',
+  `createdate` varchar(20) DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`),
   KEY `fk_address_USER` (`uid`),
   CONSTRAINT `fk_address_USER` FOREIGN KEY (`uid`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 /*Data for the table `address` */
+
+insert  into `address`(`id`,`uid`,`receiver`,`mobile`,`post`,`createdate`) values 
+(2,1,'温宇航','13145213417','032100','1599203771817');
 
 /*Table structure for table `order_` */
 
@@ -42,14 +45,12 @@ CREATE TABLE `order_` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `uid` int(11) DEFAULT NULL,
   `pid` int(11) DEFAULT NULL,
-  `adid` int(11) DEFAULT NULL,
   `STATUS` int(11) DEFAULT '10',
   `ordercode` varchar(50) DEFAULT NULL,
   `couriernumber` varchar(50) DEFAULT NULL,
   `createdate` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_order__USER` (`uid`),
-  KEY `fk_order__address` (`adid`),
   KEY `fk_order__product` (`pid`),
   CONSTRAINT `fk_order__USER` FOREIGN KEY (`uid`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -63,7 +64,7 @@ DROP TABLE IF EXISTS `product`;
 CREATE TABLE `product` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(50) DEFAULT NULL,
-  `coin` int(11) DEFAULT NULL,
+  `coin` float DEFAULT NULL,
   `price` float DEFAULT NULL,
   `stock` int(11) DEFAULT NULL,
   `subTitle` varchar(255) DEFAULT NULL,
@@ -96,17 +97,20 @@ DROP TABLE IF EXISTS `stepscoin`;
 
 CREATE TABLE `stepscoin` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `uid` int(11) DEFAULT NULL,
-  `coin` float DEFAULT NULL,
-  `rundate` varchar(20) DEFAULT NULL,
-  `convertsteps` int(11) DEFAULT NULL,
-  `createdate` varchar(20) DEFAULT NULL,
+  `uid` int(11) DEFAULT NULL COMMENT '用户id',
+  `coin` float DEFAULT '0' COMMENT '单次转换金币',
+  `rundate` varchar(20) DEFAULT NULL COMMENT '运动日期',
+  `convertsteps` int(11) DEFAULT NULL COMMENT '单次转换步数',
+  `createdate` varchar(20) DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`),
   KEY `fk_stepscoin_USER` (`uid`),
   CONSTRAINT `fk_stepscoin_USER` FOREIGN KEY (`uid`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 /*Data for the table `stepscoin` */
+
+insert  into `stepscoin`(`id`,`uid`,`coin`,`rundate`,`convertsteps`,`createdate`) values 
+(1,1,3.04,'2020-09-04',3040,'1597652479055');
 
 /*Table structure for table `stepsrecord` */
 
@@ -114,11 +118,11 @@ DROP TABLE IF EXISTS `stepsrecord`;
 
 CREATE TABLE `stepsrecord` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `uid` int(11) DEFAULT NULL,
-  `steps` int(11) NOT NULL DEFAULT '0',
-  `rundate` varchar(20) DEFAULT NULL,
-  `convertsteps` int(11) NOT NULL DEFAULT '0',
-  `createdate` varchar(20) DEFAULT NULL,
+  `uid` int(11) DEFAULT NULL COMMENT '用户id',
+  `steps` int(11) NOT NULL DEFAULT '0' COMMENT '单日步数',
+  `rundate` varchar(20) DEFAULT NULL COMMENT '运动日期',
+  `convertedsteps` int(11) NOT NULL DEFAULT '0' COMMENT '已转换步数',
+  `createdate` varchar(20) DEFAULT NULL COMMENT '创建日期',
   PRIMARY KEY (`id`),
   KEY `fk_stepsrecord_USER` (`uid`),
   CONSTRAINT `fk_stepsrecord_USER` FOREIGN KEY (`uid`) REFERENCES `user` (`id`)
@@ -126,8 +130,8 @@ CREATE TABLE `stepsrecord` (
 
 /*Data for the table `stepsrecord` */
 
-insert  into `stepsrecord`(`id`,`uid`,`steps`,`rundate`,`convertsteps`,`createdate`) values 
-(1,1,1028,NULL,0,'20200817');
+insert  into `stepsrecord`(`id`,`uid`,`steps`,`rundate`,`convertedsteps`,`createdate`) values 
+(1,1,1028,'2020-09-04',0,'20200817');
 
 /*Table structure for table `user` */
 
@@ -143,7 +147,7 @@ CREATE TABLE `user` (
   `session_key` varchar(255) DEFAULT NULL,
   `access_token` varchar(512) DEFAULT NULL,
   `steps_total` int(11) DEFAULT '0' COMMENT '步数总量',
-  `coin_total` int(11) DEFAULT '0' COMMENT '金币总量',
+  `coin_total` float DEFAULT '0' COMMENT '金币总量',
   `energy_total` float DEFAULT '0' COMMENT '包邮能量',
   `createdate` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -152,8 +156,8 @@ CREATE TABLE `user` (
 /*Data for the table `user` */
 
 insert  into `user`(`id`,`NAME`,`headimgurl`,`openid`,`unionid`,`phone`,`session_key`,`access_token`,`steps_total`,`coin_total`,`energy_total`,`createdate`) values 
-(1,'87','http://wx.qlogo.cn/mmopen/g3MonUZtNHkdmzicIlibx6iaFqAc56vxLSUfpb6n5WKSYVY0ChQKkiaJSgQ1dZuTOgvLLrhJbERQQ4eMsv84eavHiaiceqxibJxCfHe/0','o_pKo1BoTiyGuiJ-HIvx9Hl_l9JM','o88Iy5mwZiWv9NzCZBdEwGkkwb70',NULL,NULL,NULL,0,0,0,'1597652479055'),
-(2,'听闻','http://wx.qlogo.cn/mmopen/g3MonUZtNHkdmzicIlibx6iaFqAc56vxLSUfpb6n5WKSYVY0ChQKkiaJSgQ1dZuTOgvLLrhJbERQQ4eMsv84eavHiaiceqxibJxCfHe/0','a_pKo1BoTiyGuiJ-HIvx9Hl_l9JM','a88Iy5mwZiWv9NzCZBdEwGkkwb70',NULL,NULL,NULL,0,0,0,'1598242263436'),
+(1,'87','http://wx.qlogo.cn/mmopen/g3MonUZtNHkdmzicIlibx6iaFqAc56vxLSUfpb6n5WKSYVY0ChQKkiaJSgQ1dZuTOgvLLrhJbERQQ4eMsv84eavHiaiceqxibJxCfHe/0','o_pKo1BoTiyGuiJ-HIvx9Hl_l9JM','o88Iy5mwZiWv9NzCZBdEwGkkwb70','13145213417',NULL,NULL,1,3.04,0,'1597652479055'),
+(2,'听闻','http://wx.qlogo.cn/mmopen/g3MonUZtNHkdmzicIlibx6iaFqAc56vxLSUfpb6n5WKSYVY0ChQKkiaJSgQ1dZuTOgvLLrhJbERQQ4eMsv84eavHiaiceqxibJxCfHe/0','a_pKo1BoTiyGuiJ-HIvx9Hl_l9JM','a88Iy5mwZiWv9NzCZBdEwGkkwb70','18235825951',NULL,NULL,0,0,0,'1598242263436'),
 (3,'孟加拉漫天的日光','http://wx.qlogo.cn/mmopen/g3MonUZtNHkdmzicIlibx6iaFqAc56vxLSUfpb6n5WKSYVY0ChQKkiaJSgQ1dZuTOgvLLrhJbERQQ4eMsv84eavHiaiceqxibJxCfHe/0','b_pKo1BoTiyGuiJ-HIvx9Hl_l9JM','b88Iy5mwZiWv9NzCZBdEwGkkwb70',NULL,NULL,NULL,0,0,0,'1598242399807'),
 (4,'Ahau','http://wx.qlogo.cn/mmopen/g3MonUZtNHkdmzicIlibx6iaFqAc56vxLSUfpb6n5WKSYVY0ChQKkiaJSgQ1dZuTOgvLLrhJbERQQ4eMsv84eavHiaiceqxibJxCfHe/0','c_pKo1BoTiyGuiJ-HIvx9Hl_l9JM','c88Iy5mwZiWv9NzCZBdEwGkkwb70',NULL,NULL,NULL,0,0,0,'1598242487681'),
 (5,'亲亲子衿','http://wx.qlogo.cn/mmopen/g3MonUZtNHkdmzicIlibx6iaFqAc56vxLSUfpb6n5WKSYVY0ChQKkiaJSgQ1dZuTOgvLLrhJbERQQ4eMsv84eavHiaiceqxibJxCfHe/0','d_pKo1BoTiyGuiJ-HIvx9Hl_l9JM','d88Iy5mwZiWv9NzCZBdEwGkkwb70',NULL,NULL,NULL,0,0,0,'1598242601667'),
