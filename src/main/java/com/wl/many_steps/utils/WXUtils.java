@@ -48,6 +48,7 @@ public class WXUtils {
             }
         } catch (Exception e) {
             e.printStackTrace();
+            return null;
         }
         return null;
     }

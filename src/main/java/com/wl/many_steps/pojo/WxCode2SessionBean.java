@@ -1,5 +1,6 @@
 package com.wl.many_steps.pojo;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,6 +18,7 @@ public class WxCode2SessionBean {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String openid;
 
+    @JsonBackReference
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String session_key;
 

@@ -13,4 +13,10 @@ import org.hibernate.validator.constraints.NotBlank;
 public class WXBean {
     @NotBlank(message = "code 参数不能为空")
     private String code;
+
+    private String encryptedData;//加密数据
+
+    private String iv;//解密向量
+
+    private String referrer;//推荐人
 }

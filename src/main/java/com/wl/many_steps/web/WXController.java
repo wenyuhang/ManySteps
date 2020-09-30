@@ -1,11 +1,17 @@
 package com.wl.many_steps.web;
 
-import cn.hutool.json.JSONObject;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.wl.many_steps.model.ApiResponse;
+import com.wl.many_steps.pojo.User;
 import com.wl.many_steps.pojo.WXBean;
 import com.wl.many_steps.pojo.WXRunDataBean;
 import com.wl.many_steps.pojo.WxCode2SessionBean;
+import com.wl.many_steps.service.UserService;
+import com.wl.many_steps.utils.DateUtils;
 import com.wl.many_steps.utils.WXUtils;
+import org.apache.http.util.TextUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
@@ -31,44 +37,73 @@ public class WXController {
 //    private String WX_APP_SECRET = "d3a601ad379167ad2ab071714ee03997";
 
     //小程序配置
-    private String WX_APP_APPID  = "wx7daac9b7e03f1cf4";
+    private String WX_APP_APPID = "wx7daac9b7e03f1cf4";
     private String WX_APP_SECRET = "1805a3ea9fddfa40288a5293f5dc9071";
 
 
-
+    @Autowired
+    UserService userService;
 
     private static RestTemplate restTemplate;
+
     static {
         restTemplate = new RestTemplate();
         List<HttpMessageConverter<?>> list = restTemplate.getMessageConverters();
         for (HttpMessageConverter<?> httpMessageConverter : list) {
-            if(httpMessageConverter instanceof StringHttpMessageConverter) {
+            if (httpMessageConverter instanceof StringHttpMessageConverter) {
                 ((StringHttpMessageConverter) httpMessageConverter).setDefaultCharset(Charset.forName("UTF-8"));
                 break;
             }
         }
     }
 
-    private String session_key;
+
 
     @ResponseBody
     @PostMapping(value = "/wxlogin")
     public ApiResponse wxLogin(@Validated @RequestBody WXBean wxBean) {
-        String url = "https://api.weixin.qq.com/sns/jscode2session?appid="+WX_APP_APPID+"&secret="+WX_APP_SECRET+"&js_code="+wxBean.getCode()+"&grant_type=authorization_code";
+        String url = "https://api.weixin.qq.com/sns/jscode2session?appid=" + WX_APP_APPID + "&secret=" + WX_APP_SECRET + "&js_code=" + wxBean.getCode() + "&grant_type=authorization_code";
         ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
         System.out.println(response.getBody());
-        JSONObject jsonObject = new JSONObject(response.getBody());
-        WxCode2SessionBean bean = jsonObject.toBean(WxCode2SessionBean.class);
-        session_key = bean.getSession_key();
-//        access_token = "36_SMAl5i1zZH5bsG0t-8RU1a9spFf5T8LsDmYrxdHTkMi388Y6EurShaMWUb1MQVwPFvxgMiFBFX2fhbztA24HRb3m_F2_Am2vK_wV8OKIq90";
-//        openid = "o_pKo1BoTiyGuiJ-HIvx9Hl_l9JM";
-        return ApiResponse.ofSuccess(bean);
+        System.out.println(wxBean.getEncryptedData());
+        System.out.println(wxBean.getIv());
+        WxCode2SessionBean bean = JSON.parseObject(response.getBody(), WxCode2SessionBean.class);
+        String session_key = bean.getSession_key();
+        String openid = bean.getOpenid();
+        User user = userService.get(openid);
+        if (null == user) {
+            JSONObject userInfo = WXUtils.getUserInfo(wxBean.getEncryptedData(), session_key, wxBean.getIv());
+            if (userInfo == null) {
+                return ApiResponse.of(999, "数据解析错误，请稍后重试", null);
+            }
+            user = new User();
+            String name = (String) userInfo.get("nickName");
+            user.setName(name);
+            String avatarUrl = (String) userInfo.get("avatarUrl");
+            user.setHeadimgurl(avatarUrl);
+            String openId = (String) userInfo.get("openId");
+            user.setOpenid(openId);
+            String unionId = (String) userInfo.get("unionId");
+            if (!TextUtils.isEmpty(unionId)){
+                user.setUnionid(unionId);
+            }
+            user.setCreatedate(DateUtils.stampToDate(System.currentTimeMillis()));
+            user.setSession_key(session_key);
+            //邀请人功能 待开发
+            System.out.println(userInfo.toJSONString());
+            int code = userService.add(user);
+            if (code==0){
+                return ApiResponse.of(999,"操作失败请重试",null);
+            }
+        }
+
+        return ApiResponse.ofSuccess(user);
     }
 
     @ResponseBody
-        @PostMapping(value = "/wxRunData")
-    public String getWXRunData(@Validated @RequestBody WXRunDataBean wxRunDataBean){
-        com.alibaba.fastjson.JSONObject userInfo = WXUtils.getUserInfo(wxRunDataBean.getData(), session_key, wxRunDataBean.getIv());
+    @PostMapping(value = "/wxRunData")
+    public String getWXRunData(@Validated @RequestBody WXRunDataBean wxRunDataBean) {
+        JSONObject userInfo = WXUtils.getUserInfo(wxRunDataBean.getData(), "session_key", wxRunDataBean.getIv());
         System.out.println(userInfo.toJSONString());
         return userInfo.toJSONString();
     }

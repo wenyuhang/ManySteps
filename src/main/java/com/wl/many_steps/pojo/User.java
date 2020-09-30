@@ -27,6 +27,10 @@ public class User {
 
     private String unionid;
 
+    private String session_key;
+
+    private String access_token;
+
     private String phone;
 
     private int steps_total;
