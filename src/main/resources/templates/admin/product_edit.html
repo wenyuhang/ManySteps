@@ -33,6 +33,8 @@
                         return;
                     if (!checkInt(this.bean.coin, "产品金币"))
                         return;
+                    if (!checkInt(this.bean.energy, "包邮能量"))
+                        return;
                     if (!checkNumber(this.bean.price, "产品价格"))
                         return;
                     if (!checkInt(this.bean.stock, "产品库存"))
@@ -45,6 +47,7 @@
                     data.append("id", this.bean.id);
                     data.append("name", this.bean.name);
                     data.append("coin", this.bean.coin);
+                    data.append("energy", this.bean.energy);
                     data.append("price", this.bean.price);
                     data.append("stock", this.bean.stock);
                     data.append("subTitle", this.bean.subTitle);
@@ -85,6 +88,11 @@
                 <tr>
                     <td>金币</td>
                     <td><input @keyup.enter="update" v-model.trim="bean.coin" type="text"
+                               class="form-control"></td>
+                </tr>
+                <tr>
+                    <td>能量</td>
+                    <td><input @keyup.enter="update" v-model.trim="bean.energy" type="text"
                                class="form-control"></td>
                 </tr>
                 <tr>

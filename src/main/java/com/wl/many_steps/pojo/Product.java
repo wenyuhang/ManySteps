@@ -34,7 +34,7 @@ public class Product {
 
     private String imageurl;
 
-    private int convertsteps;
+    private float energy;
 
     private String createdate;
 

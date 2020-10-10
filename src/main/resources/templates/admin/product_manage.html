@@ -19,7 +19,7 @@
                 stock: 0,
                 subTitle: '',
                 imageurl: '',
-                convertsteps: 0,
+                energy: 0,
                 createdate: '',
             },
             pagination: {},
@@ -64,6 +64,8 @@
                         return;
                     if (!checkInt(this.bean.coin, "产品金币"))
                         return;
+                    if (!checkInt(this.bean.energy, "包邮能量"))
+                        return;
                     if (!checkNumber(this.bean.price, "产品价格"))
                         return;
                     if (!checkInt(this.bean.stock, "产品库存"))
@@ -75,6 +77,7 @@
                     let data = new FormData();
                     data.append("name", this.bean.name);
                     data.append("coin", this.bean.coin);
+                    data.append("energy", this.bean.energy);
                     data.append("price", this.bean.price);
                     data.append("stock", this.bean.stock);
                     data.append("subTitle", this.bean.subTitle);
@@ -83,10 +86,10 @@
                         alert(response.data.message);
                         if (200 == response.data.code) {
                             //刷新列表
-                            vue.list(0);
+                            vue.list(vue.pagination.lastPage);
                             //清空输入框数据
                             $("#singlePic").val('');
-                            vue.bean =  {id:0,name:'','coin':0,'price':99.98,'stock':99,'subTitle':'',imagefile:null};
+                            vue.bean =  {id:0,name:'','coin':0,'energy':0,'price':99.98,'stock':99,'subTitle':'',imagefile:null};
                         }
 
                     });
@@ -127,6 +130,7 @@
                 <th>图片</th>
                 <th>产品名称</th>
                 <th>金币</th>
+                <th>包邮能量</th>
                 <th>价格</th>
                 <th>库存</th>
                 <th>标签</th>
@@ -144,6 +148,7 @@
                 </td>
                 <td>{{bean.name}}</td>
                 <td>{{bean.coin}}</td>
+                <td>{{bean.energy}}</td>
                 <td>{{bean.price}}</td>
                 <td>{{bean.stock}}</td>
                 <td>{{bean.subTitle}}</td>
@@ -172,11 +177,16 @@
             <table class="addTable">
                 <tr>
                     <td>名称</td>
-                    <td><input @keyup.enter="add" v-model.trim="bean.name" type="text" class="form-control"></td>
+                    <td><input @keyup.enter="add" v-model.trim="bean.name" type="text" class="form-control" placeholder="请输入商品名称"></td>
                 </tr>
                 <tr>
                     <td>金币</td>
                     <td><input @keyup.enter="add" v-model.trim="bean.coin" type="text"
+                               class="form-control"></td>
+                </tr>
+                <tr>
+                    <td>能量</td>
+                    <td><input @keyup.enter="update" v-model.trim="bean.energy" type="text"
                                class="form-control"></td>
                 </tr>
                 <tr>
@@ -192,7 +202,7 @@
                 <tr>
                     <td>标签</td>
                     <td><input @keyup.enter="add" v-model.trim="bean.subTitle" type="text"
-                               class="form-control"></td>
+                               class="form-control" placeholder="请选择商品标签"></td>
                 </tr>
                 <tr>
                     <td>图片</td>

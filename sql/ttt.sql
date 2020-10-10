@@ -63,20 +63,20 @@ DROP TABLE IF EXISTS `product`;
 
 CREATE TABLE `product` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) DEFAULT NULL,
-  `coin` float DEFAULT NULL,
-  `price` float DEFAULT NULL,
-  `stock` int(11) DEFAULT NULL,
-  `subTitle` varchar(255) DEFAULT NULL,
-  `imageurl` varchar(255) DEFAULT NULL,
-  `convertsteps` int(11) DEFAULT NULL,
-  `createdate` varchar(20) DEFAULT NULL,
+  `name` varchar(50) DEFAULT NULL COMMENT '商品名称',
+  `coin` float DEFAULT NULL COMMENT '步数金币',
+  `price` float DEFAULT NULL COMMENT '商品价格',
+  `stock` int(11) DEFAULT NULL COMMENT '商品库存',
+  `subTitle` varchar(255) DEFAULT NULL COMMENT '商品标签',
+  `imageurl` varchar(255) DEFAULT NULL COMMENT '商品图片',
+  `energy` float DEFAULT NULL COMMENT '包邮能量',
+  `createdate` varchar(20) DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
 
 /*Data for the table `product` */
 
-insert  into `product`(`id`,`name`,`coin`,`price`,`stock`,`subTitle`,`imageurl`,`convertsteps`,`createdate`) values 
+insert  into `product`(`id`,`name`,`coin`,`price`,`stock`,`subTitle`,`imageurl`,`energy`,`createdate`) values 
 (4,'测试商品01',1111,99.98,0,'不包邮','img/product/1599116596537.jpg',0,'1599116596598'),
 (5,'测试商品02',2222,99.98,20,'包邮','img/product/1599105076224.jpg',0,'1599105076337'),
 (6,'测试商品03',3333,99.98,30,'不包邮','img/product/1599105116066.jpg',0,'1599105116129'),
@@ -89,7 +89,9 @@ insert  into `product`(`id`,`name`,`coin`,`price`,`stock`,`subTitle`,`imageurl`,
 (13,'测试商品10',10100,99.97,100,'包邮','img/product/1599105146605.jpg',0,'1599105200576'),
 (14,'测试商品11',11110,99.97,110,'包邮','img/product/1599105146605.jpg',0,'1599105200576'),
 (15,'测试商品12',12120,99.97,120,'包邮','img/product/1599105146605.jpg',0,'1599105200576'),
-(16,'测试商品13',13130,99.97,130,'包邮','img/product/1599105146605.jpg',0,'1599105200576');
+(16,'测试商品13',13130,99.97,130,'包邮','img/product/1599105146605.jpg',0,'1599105200576'),
+(17,'测试商品14',14140,99.98,130,'不包邮','img/product/1602209739849.jpg',200,'1602209739964'),
+(18,'测试商品15',15150,99.99,15,'包邮','img/product/1602210094530.jpg',102,'1602210094689');
 
 /*Table structure for table `stepscoin` */
 
@@ -151,7 +153,7 @@ CREATE TABLE `user` (
   `energy_total` float DEFAULT '0' COMMENT '包邮能量',
   `createdate` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
 
 /*Data for the table `user` */
 
@@ -161,7 +163,9 @@ insert  into `user`(`id`,`NAME`,`headimgurl`,`openid`,`unionid`,`phone`,`session
 (3,'孟加拉漫天的日光','http://wx.qlogo.cn/mmopen/g3MonUZtNHkdmzicIlibx6iaFqAc56vxLSUfpb6n5WKSYVY0ChQKkiaJSgQ1dZuTOgvLLrhJbERQQ4eMsv84eavHiaiceqxibJxCfHe/0','b_pKo1BoTiyGuiJ-HIvx9Hl_l9JM','b88Iy5mwZiWv9NzCZBdEwGkkwb70',NULL,NULL,NULL,0,0,0,'1598242399807'),
 (4,'Ahau','http://wx.qlogo.cn/mmopen/g3MonUZtNHkdmzicIlibx6iaFqAc56vxLSUfpb6n5WKSYVY0ChQKkiaJSgQ1dZuTOgvLLrhJbERQQ4eMsv84eavHiaiceqxibJxCfHe/0','c_pKo1BoTiyGuiJ-HIvx9Hl_l9JM','c88Iy5mwZiWv9NzCZBdEwGkkwb70',NULL,NULL,NULL,0,0,0,'1598242487681'),
 (5,'亲亲子衿','http://wx.qlogo.cn/mmopen/g3MonUZtNHkdmzicIlibx6iaFqAc56vxLSUfpb6n5WKSYVY0ChQKkiaJSgQ1dZuTOgvLLrhJbERQQ4eMsv84eavHiaiceqxibJxCfHe/0','d_pKo1BoTiyGuiJ-HIvx9Hl_l9JM','d88Iy5mwZiWv9NzCZBdEwGkkwb70',NULL,NULL,NULL,0,0,0,'1598242601667'),
-(7,'知足常乐的小雪儿','http://wx.qlogo.cn/mmopen/g3MonUZtNHkdmzicIlibx6iaFqAc56vxLSUfpb6n5WKSYVY0ChQKkiaJSgQ1dZuTOgvLLrhJbERQQ4eMsv84eavHiaiceqxibJxCfHe/0','e_pKo1BoTiyGuiJ-HIvx9Hl_l9JM','e88Iy5mwZiWv9NzCZBdEwGkkwb70',NULL,NULL,NULL,0,0,0,'1598243186320');
+(7,'知足常乐的小雪儿','http://wx.qlogo.cn/mmopen/g3MonUZtNHkdmzicIlibx6iaFqAc56vxLSUfpb6n5WKSYVY0ChQKkiaJSgQ1dZuTOgvLLrhJbERQQ4eMsv84eavHiaiceqxibJxCfHe/0','e_pKo1BoTiyGuiJ-HIvx9Hl_l9JM','e88Iy5mwZiWv9NzCZBdEwGkkwb70',NULL,NULL,NULL,0,0,0,'1598243186320'),
+(8,'风度','https://thirdwx.qlogo.cn/mmopen/vi_32/A4Dgzwibc1aUG3iaQcH9zNX776yLXQ4u9icus8MUdqDHeqxy4x1x80EgZPSCtqRgjRg5a5Pvs8icCQbW2ia9sibic2XSA/132','oiR4w5TGrBjEb5_MH6kEdur58aDU','okqcDw1qV3GwOoo95sHQIu-G1OIs',NULL,'6rrt1Ykk7PzveXNIiyllbQ==',NULL,0,200000,200,'1600676713850'),
+(11,'輸ㄋ〝风度','https://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTKy2a2yT95r6HGgGYsykL5DS1rIAAWcQSibqn2YsgkaY30hLPJIycc5yopCPovogr0px1I7vJV56Xg/132','oiR4w5eV5ZvJ4EctNtTRRNY2E-Mo','okqcDwyy5fzJjLyAUD4tEezdH8kw',NULL,'DW+XiF7eSHrXOZzBdmxZqw==',NULL,0,200000,102,'2020-09-22 12:20:04');
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

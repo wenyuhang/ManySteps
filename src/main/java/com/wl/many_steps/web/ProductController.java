@@ -46,6 +46,7 @@ public class ProductController {
     @RequestMapping(value = "/addProduct", method = RequestMethod.POST)
     public ApiResponse add(@NotBlank(message = "name 不能为空") String name,
                            @NotBlank(message = "coin 不能为空") @Min(value = 0, message = "coin 不能小于0") String coin,
+                           @NotBlank(message = "energy 不能为空") @Min(value = 0, message = "energy 不能小于0") String energy,
                            @NotBlank(message = "price 不能为空") @Min(value = 0, message = "price 不能小于0") String price,
                            @NotBlank(message = "stock 不能为空") @Min(value = 0, message = "stock 不能小于0") String stock,
                            @NotBlank(message = "subTitle 不能为空") String subTitle,
@@ -68,11 +69,11 @@ public class ProductController {
         product = new Product();
         product.setName(name);
         product.setCoin(Float.parseFloat(coin));
+        product.setEnergy(Float.parseFloat(energy));
         product.setPrice(Float.parseFloat(price));
         product.setStock(Integer.parseInt(stock));
         product.setSubTitle(subTitle);
         product.setImageurl(imagePath);
-        product.setConvertsteps(0);
         product.setCreatedate(String.valueOf(System.currentTimeMillis()));
         int code = productService.add(product);
         if (code==0){
@@ -109,6 +110,7 @@ public class ProductController {
     public ApiResponse update(@NotBlank(message = "id 不能为空") @Min(value = 0, message = "id 不能小于0") String id,
                               @NotBlank(message = "name 不能为空") String name,
                               @NotBlank(message = "coin 不能为空") @Min(value = 0, message = "coin 不能小于0") String coin,
+                              @NotBlank(message = "energy 不能为空") @Min(value = 0, message = "energy 不能小于0") String energy,
                               @NotBlank(message = "price 不能为空") @Min(value = 0, message = "price 不能小于0") String price,
                               @NotBlank(message = "stock 不能为空") @Min(value = 0, message = "stock 不能小于0") String stock,
                               @NotBlank(message = "subTitle 不能为空") String subTitle,
@@ -130,6 +132,7 @@ public class ProductController {
         }
         product.setName(name);
         product.setCoin(Float.parseFloat(coin));
+        product.setEnergy(Float.parseFloat(energy));
         product.setPrice(Float.parseFloat(price));
         product.setStock(Integer.parseInt(stock));
         product.setSubTitle(subTitle);

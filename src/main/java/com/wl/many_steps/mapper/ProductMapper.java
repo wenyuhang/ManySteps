@@ -12,9 +12,9 @@ import java.util.List;
  * desc   :
  */
 public interface ProductMapper {
-    @Insert("insert into product ( name,coin,price,stock,subTitle,imageurl,convertsteps,createdate ) " +
+    @Insert("insert into product ( name,coin,price,stock,subTitle,imageurl,energy,createdate ) " +
             "values (#{product.name},#{product.coin},#{product.price},#{product.stock},#{product.subTitle}," +
-            "#{product.imageurl},#{product.convertsteps},#{product.createdate}) ")
+            "#{product.imageurl},#{product.energy},#{product.createdate}) ")
     @Options(useGeneratedKeys=true, keyProperty="product.id", keyColumn="id")
     int add(@Param("product") Product product);
 
@@ -22,7 +22,7 @@ public interface ProductMapper {
     void delete(int id);
 
     @Update("update product set name=#{product.name},coin=#{product.coin},price=#{product.price},stock=#{product.stock},subTitle=#{product.subTitle}," +
-            "imageurl=#{product.imageurl},convertsteps=#{product.convertsteps},createdate=#{product.createdate} where id=#{product.id} ")
+            "imageurl=#{product.imageurl},convertsteps=#{product.energy},createdate=#{product.createdate} where id=#{product.id} ")
     int update(@Param("product") Product product);
 
     @Select("select * from product where id= #{id} ")
