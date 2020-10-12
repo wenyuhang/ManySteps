@@ -42,6 +42,12 @@ public class AddressController {
         if (null==user){
             return ApiResponse.of(999,"该用户不存在",null);
         }
+        //检查该地址是否存在
+        Address ads = addressService.getByUid(address.getUid());
+        if (null!=ads){
+            return ApiResponse.of(999,"收货地址已存在，请勿多次添加",null);
+        }
+        //添加收货地址
         address.setCreatedate(String.valueOf(System.currentTimeMillis()));
         int code = addressService.add(address);
         if (code==0){
@@ -72,7 +78,7 @@ public class AddressController {
     @RequestMapping(value = "/updateAddress",method = RequestMethod.POST)
     public ApiResponse update(@Validated @RequestBody Address req){
         //检查该地址是否存在
-        Address address = addressService.get(req.getUid());
+        Address address = addressService.getByUid(req.getUid());
         if (null==address){
             return ApiResponse.of(999,"参数错误请重试",null);
         }
@@ -93,9 +99,9 @@ public class AddressController {
     @RequestMapping(value = "/getAddress",method = RequestMethod.POST)
     public ApiResponse get(@Validated @RequestBody ReqIDBean req){
         //检查该地址是否存在
-        Address address = addressService.get(req.getId());
+        Address address = addressService.getByUid(req.getId());
         if (null==address){
-            return ApiResponse.of(999,"参数错误请重试",null);
+            return ApiResponse.of(999,"该用户没有添加收货地址",null);
         }
         return ApiResponse.ofSuccess(address);
     }

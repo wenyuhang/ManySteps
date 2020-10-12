@@ -24,6 +24,9 @@ public class Address {
     @NotBlank(message = " receiver 不能为空")
     private String receiver;
 
+    @NotBlank(message = " address 不能为空")
+    private String address;
+
     @NotBlank(message = " mobile 不能为空")
     private String mobile;
 

@@ -18,7 +18,10 @@ public interface OrderMapper {
     int add(@Param("order") Order order);
 
     @Delete(" delete from order_ where id= #{id} ")
-    void delete(int id);
+    int delete(int id);
+
+    @Delete(" delete from order_ where ordercode= #{ordercode} ")
+    int deleteByOrderCode(String code);
 
     @Select("select * from order_ where id= #{id} ")
     Order get(int id);

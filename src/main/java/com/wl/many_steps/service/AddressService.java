@@ -50,11 +50,12 @@ public class AddressService {
      * @param uid 用户id
      * @return
      */
-    public Address get(int uid){
+    public Address getByUid(int uid){
         Address address = null;
         try {
-            address = addressMapper.get(uid);
-            if (null==address|| TextUtils.isEmpty(address.getReceiver())){
+            address = addressMapper.getByUid(uid);
+            if (null==address|| TextUtils.isEmpty(address.getReceiver())
+                    ||TextUtils.isEmpty(address.getAddress()) || TextUtils.isEmpty(address.getMobile())){
                 address = null;
             }
         }catch (Exception e){

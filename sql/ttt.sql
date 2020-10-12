@@ -22,20 +22,22 @@ DROP TABLE IF EXISTS `address`;
 
 CREATE TABLE `address` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `uid` int(11) DEFAULT NULL COMMENT '用户id',
+  `uid` int(11) NOT NULL COMMENT '用户id',
   `receiver` varchar(20) DEFAULT NULL COMMENT '联系人信息',
+  `address` varchar(512) DEFAULT NULL COMMENT '收货地址',
   `mobile` varchar(20) DEFAULT NULL COMMENT '手机号',
   `post` varchar(20) DEFAULT NULL COMMENT '邮编',
   `createdate` varchar(20) DEFAULT NULL COMMENT '创建时间',
-  PRIMARY KEY (`id`),
+  PRIMARY KEY (`id`,`uid`),
   KEY `fk_address_USER` (`uid`),
   CONSTRAINT `fk_address_USER` FOREIGN KEY (`uid`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 
 /*Data for the table `address` */
 
-insert  into `address`(`id`,`uid`,`receiver`,`mobile`,`post`,`createdate`) values 
-(2,1,'温宇航','13145213417','032100','1599203771817');
+insert  into `address`(`id`,`uid`,`receiver`,`address`,`mobile`,`post`,`createdate`) values 
+(2,1,'温宇航','山西省文水县水上公园','13145213417','032100','1599203771817'),
+(9,8,'温yh2','北京市昌平区回龙观','13145213417','032100','1602491496814');
 
 /*Table structure for table `order_` */
 
@@ -89,7 +91,7 @@ insert  into `product`(`id`,`name`,`coin`,`price`,`stock`,`subTitle`,`imageurl`,
 (13,'测试商品10',10100,99.97,100,'包邮','img/product/1599105146605.jpg',0,'1599105200576'),
 (14,'测试商品11',11110,99.97,110,'包邮','img/product/1599105146605.jpg',0,'1599105200576'),
 (15,'测试商品12',12120,99.97,120,'包邮','img/product/1599105146605.jpg',0,'1599105200576'),
-(16,'测试商品13',13130,99.97,130,'包邮','img/product/1599105146605.jpg',0,'1599105200576'),
+(16,'测试商品13',13130,99.97,130,'包邮','img/product/1599105146605.jpg',99999,'1599105200576'),
 (17,'测试商品14',14140,99.98,130,'不包邮','img/product/1602209739849.jpg',200,'1602209739964'),
 (18,'测试商品15',15150,99.99,15,'包邮','img/product/1602210094530.jpg',102,'1602210094689');
 
