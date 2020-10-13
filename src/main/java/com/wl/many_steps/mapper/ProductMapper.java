@@ -22,7 +22,7 @@ public interface ProductMapper {
     void delete(int id);
 
     @Update("update product set name=#{product.name},coin=#{product.coin},price=#{product.price},stock=#{product.stock},subTitle=#{product.subTitle}," +
-            "imageurl=#{product.imageurl},convertsteps=#{product.energy},createdate=#{product.createdate} where id=#{product.id} ")
+            "imageurl=#{product.imageurl},energy=#{product.energy},createdate=#{product.createdate} where id=#{product.id} ")
     int update(@Param("product") Product product);
 
     @Select("select * from product where id= #{id} ")

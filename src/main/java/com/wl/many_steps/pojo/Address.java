@@ -18,7 +18,7 @@ public class Address {
 
     private int id;
 
-   @Min(value = 1,message = "uid 参数不能小于1")
+    @Min(value = 1, message = "uid 参数不能小于1")
     private int uid;
 
     @NotBlank(message = " receiver 不能为空")
@@ -29,6 +29,15 @@ public class Address {
 
     @NotBlank(message = " mobile 不能为空")
     private String mobile;
+
+    @NotBlank(message = " province 不能为空")
+    private String province;
+
+    @NotBlank(message = " city 不能为空")
+    private String city;
+
+    @NotBlank(message = " area 不能为空")
+    private String area;
 
     @NotBlank(message = " post 不能为空")
     private String post;

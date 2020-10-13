@@ -12,8 +12,9 @@ import java.util.List;
  * desc   :
  */
 public interface AddressMapper {
-    @Insert("insert into address ( uid,receiver,address,mobile,post,createdate) " +
-            "values (#{address.uid},#{address.receiver},#{address.address},#{address.mobile},#{address.post},#{address.createdate}) ")
+    @Insert("insert into address ( uid,receiver,address,mobile,province,city,area,post,createdate) " +
+            "values (#{address.uid},#{address.receiver},#{address.address},#{address.mobile}," +
+            "#{address.province},#{address.city},#{address.area},#{address.post},#{address.createdate}) ")
     @Options(useGeneratedKeys=true, keyProperty="address.id", keyColumn="id")
     int add(@Param("address") Address address);
 
@@ -21,7 +22,8 @@ public interface AddressMapper {
     int delete(int uid);
 
     @Update("update address set uid=#{address.uid},receiver=#{address.receiver},address=#{address.address},mobile=#{address.mobile}," +
-            "post=#{address.post},createdate=#{address.createdate}where id=#{address.id} ")
+            "province=#{address.province},city=#{address.city},area=#{address.area},post=#{address.post}," +
+            "createdate=#{address.createdate}where id=#{address.id} ")
     int update(@Param("address") Address address);
 
     @Select("select * from address where uid= #{uid} ")
