@@ -24,20 +24,24 @@ CREATE TABLE `address` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `uid` int(11) NOT NULL COMMENT '用户id',
   `receiver` varchar(20) DEFAULT NULL COMMENT '联系人信息',
-  `address` varchar(512) DEFAULT NULL COMMENT '收货地址',
+  `address` varchar(512) DEFAULT NULL COMMENT '详细地址',
   `mobile` varchar(20) DEFAULT NULL COMMENT '手机号',
+  `province` varchar(30) DEFAULT NULL COMMENT '省',
+  `city` varchar(30) DEFAULT NULL COMMENT '市',
+  `area` varchar(30) DEFAULT NULL COMMENT '区',
   `post` varchar(20) DEFAULT NULL COMMENT '邮编',
   `createdate` varchar(20) DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`,`uid`),
   KEY `fk_address_USER` (`uid`),
   CONSTRAINT `fk_address_USER` FOREIGN KEY (`uid`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 
 /*Data for the table `address` */
 
-insert  into `address`(`id`,`uid`,`receiver`,`address`,`mobile`,`post`,`createdate`) values 
-(2,1,'温宇航','山西省文水县水上公园','13145213417','032100','1599203771817'),
-(9,8,'温yh2','北京市昌平区回龙观','13145213417','032100','1602491496814');
+insert  into `address`(`id`,`uid`,`receiver`,`address`,`mobile`,`province`,`city`,`area`,`post`,`createdate`) values 
+(2,1,'温宇航','水上公园','13145213417','山西省','吕梁市','文水县','032100','1599203771817'),
+(9,2,'温yh2','回龙观街道','13145213417','北京市','北京市','昌平区','032100','1602491496814'),
+(10,8,'温宇航','回龙观街道104号','13145213417','北京市','北京市','昌平区','100002','1602584381735');
 
 /*Table structure for table `order_` */
 
@@ -79,8 +83,8 @@ CREATE TABLE `product` (
 /*Data for the table `product` */
 
 insert  into `product`(`id`,`name`,`coin`,`price`,`stock`,`subTitle`,`imageurl`,`energy`,`createdate`) values 
-(4,'测试商品01',1111,99.98,0,'不包邮','img/product/1599116596537.jpg',0,'1599116596598'),
-(5,'测试商品02',2222,99.98,20,'包邮','img/product/1599105076224.jpg',0,'1599105076337'),
+(4,'测试商品01',1111,199.98,0,'不包邮','img/product/1602559008089.jpg',23,'1602560891470'),
+(5,'测试商品02',2222,99.98,20,'包邮','img/product/1602560910809.jpg',0,'1602560910945'),
 (6,'测试商品03',3333,99.98,30,'不包邮','img/product/1599105116066.jpg',0,'1599105116129'),
 (7,'测试商品04',4444,99.98,40,'包邮','img/product/1599105146605.jpg',0,'1599105146663'),
 (8,'测试商品05',5555,99.98,50,'包邮','img/product/1599105176230.jpg',0,'1599105176289'),
