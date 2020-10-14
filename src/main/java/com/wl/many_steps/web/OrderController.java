@@ -1,16 +1,22 @@
 package com.wl.many_steps.web;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.wl.many_steps.model.ApiResponse;
 import com.wl.many_steps.pojo.*;
 import com.wl.many_steps.service.OrderService;
 import com.wl.many_steps.service.ProductService;
 import com.wl.many_steps.service.UserService;
+import com.wl.many_steps.utils.DateUtils;
+import com.wl.many_steps.utils.RandomNumber;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * author : WYH
@@ -58,9 +64,9 @@ public class OrderController {
         if (coin_total<coin){
             return ApiResponse.of(999,"金币余额不足",null);
         }
-        if (energy_total<energy){
-            return ApiResponse.of(999,"包邮能量不足",null);
-        }
+//        if (energy_total<energy){
+//            return ApiResponse.of(999,"包邮能量不足",null);
+//        }
         return ApiResponse.ofSuccess(null);
     }
 
@@ -82,21 +88,27 @@ public class OrderController {
         }
         float coin = product.getCoin();
         float energy = product.getEnergy();
+        int stock = product.getStock();
         float coin_total = user.getCoin_total();
         float energy_total = user.getEnergy_total();
 
+        if (stock<=0){
+            return ApiResponse.of(999,"商品已被兑换完毕，工作人员正在加紧补货！~",null);
+        }
         if (coin_total<coin){
             return ApiResponse.of(999,"金币余额不足",null);
         }
-        if (energy_total<energy){
-            return ApiResponse.of(999,"包邮能量不足",null);
-        }
+//        if (energy_total<energy){
+//            return ApiResponse.of(999,"包邮能量不足",null);
+//        }
         //创建订单
         Order order = new Order();
         order.setUid(placeOrderBean.getUid());
         order.setPid(placeOrderBean.getPid());
         order.setAdid(placeOrderBean.getAdid());
-        order.setOrdercode("");
+        order.setOrdercode(RandomNumber.getInstance().GetRandom());
+        order.setStatus(10);
+        order.setCreatedate(DateUtils.stampToDate(System.currentTimeMillis()));
         int code = orderService.add(order);
         if (code==0){
             return ApiResponse.of(999,"操作失败请重试",null);
@@ -110,7 +122,32 @@ public class OrderController {
             orderService.deleteByOrderCode(order.getOrdercode());
             return ApiResponse.of(999,"操作失败请重试",null);
         }
+        //商品进行库存划扣
+        product.setStock(stock-1);
+        int updata = productService.updata(product);
+        if (update==0){
+            //扣款失败删除订单
+            orderService.deleteByOrderCode(order.getOrdercode());
+            //恢复余额扣款
+            user.setCoin_total(coin_total);
+//            user.setEnergy_total(energy_total);
+            userService.update(user);
+            return ApiResponse.of(999,"操作失败请重试",null);
+        }
 
         return ApiResponse.ofSuccess(order);
+    }
+
+    /**
+     * 获取历史订单
+     * @param pageBean
+     * @return
+     */
+    @PostMapping(value = "/myOrder")
+    public ApiResponse myOrder(@Validated @RequestBody PageBean pageBean){
+        PageHelper.startPage(pageBean.getPage(), pageBean.getSize());
+        List<Order> list = orderService.listByUid(pageBean.getId());
+        PageInfo pageInfo = new PageInfo(list);
+        return ApiResponse.ofSuccess(pageInfo);
     }
 }

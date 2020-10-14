@@ -27,7 +27,7 @@ public interface UserMapper {
     @Select("select * from user where openid= #{openid} ")
     User getByOpenid(String openid);
 
-    @Update("update user set name=#{name},headimgurl=#{user.headimgurl},openid=#{user.openid},phone=#{user.phone},session_key=#{user.session_key}," +
+    @Update("update user set name=#{user.name},headimgurl=#{user.headimgurl},openid=#{user.openid},phone=#{user.phone},session_key=#{user.session_key}," +
             "access_token=#{user.access_token},steps_total=#{user.steps_total},coin_total=#{user.coin_total},energy_total=#{user.energy_total}," +
             "createdate=#{user.createdate} where id=#{user.id}")
     int update(@Param("user") User user);

@@ -5,6 +5,8 @@ import com.wl.many_steps.pojo.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * author : WYH
  * e-mail : wenyuhang@qinjia001.com
@@ -32,6 +34,15 @@ public class OrderService {
      */
     public int deleteByOrderCode(String ordercode){
         return orderMapper.deleteByOrderCode(ordercode);
+    }
+
+    /**
+     * 根据用户id获取历史订单
+     * @param uid
+     * @return
+     */
+    public List<Order> listByUid(int uid){
+        return orderMapper.listByUser(uid);
     }
 
 }

@@ -43,25 +43,71 @@ insert  into `address`(`id`,`uid`,`receiver`,`address`,`mobile`,`province`,`city
 (9,2,'温yh2','回龙观街道','13145213417','北京市','北京市','昌平区','032100','1602491496814'),
 (10,8,'温宇航','回龙观街道104号','13145213417','北京市','北京市','昌平区','100002','1602584381735');
 
+/*Table structure for table `invite_rela` */
+
+DROP TABLE IF EXISTS `invite_rela`;
+
+CREATE TABLE `invite_rela` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `uid` int(11) DEFAULT NULL,
+  `inviter_id` int(11) DEFAULT NULL,
+  `createdate` varchar(20) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+/*Data for the table `invite_rela` */
+
+insert  into `invite_rela`(`id`,`uid`,`inviter_id`,`createdate`) values 
+(1,15,8,'2020-10-14 16:53:19');
+
 /*Table structure for table `order_` */
 
 DROP TABLE IF EXISTS `order_`;
 
 CREATE TABLE `order_` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `uid` int(11) DEFAULT NULL,
-  `pid` int(11) DEFAULT NULL,
-  `STATUS` int(11) DEFAULT '10',
-  `ordercode` varchar(50) DEFAULT NULL,
-  `couriernumber` varchar(50) DEFAULT NULL,
-  `createdate` varchar(20) DEFAULT NULL,
+  `uid` int(11) DEFAULT NULL COMMENT '用户id',
+  `pid` int(11) DEFAULT NULL COMMENT '商品id',
+  `adid` int(10) DEFAULT NULL COMMENT '地址id',
+  `STATUS` int(11) DEFAULT '10' COMMENT '订单状态',
+  `ordercode` varchar(50) DEFAULT NULL COMMENT '订单编号',
+  `couriernumber` varchar(50) DEFAULT NULL COMMENT '快递编号',
+  `createdate` varchar(20) DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`),
   KEY `fk_order__USER` (`uid`),
   KEY `fk_order__product` (`pid`),
   CONSTRAINT `fk_order__USER` FOREIGN KEY (`uid`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8;
 
 /*Data for the table `order_` */
+
+insert  into `order_`(`id`,`uid`,`pid`,`adid`,`STATUS`,`ordercode`,`couriernumber`,`createdate`) values 
+(7,8,18,10,10,'N202010141107290001',NULL,'2020-10-14 16:53:19'),
+(8,8,18,10,10,'N202010141120060001',NULL,'2020-10-14 16:53:19'),
+(9,8,18,10,10,'N202010141205010001',NULL,'2020-10-14 16:53:19'),
+(10,8,18,10,10,'N202010141207540001',NULL,'2020-10-14 16:53:19'),
+(11,8,18,10,10,'N202010141208540001',NULL,'2020-10-14 16:53:19'),
+(12,8,18,10,10,'N202010141213280001',NULL,'2020-10-14 16:53:19'),
+(13,8,18,10,10,'N202010141216450001',NULL,'2020-10-14 16:53:19'),
+(14,8,18,10,10,'N202010141217230001',NULL,'2020-10-14 16:53:19'),
+(15,8,18,10,10,'N202010141219130001',NULL,'2020-10-14 16:53:19'),
+(16,8,18,10,10,'N202010141221040001',NULL,'2020-10-14 16:53:19'),
+(17,8,18,10,10,'N202010141221180001',NULL,'2020-10-14 16:53:19'),
+(18,8,18,10,10,'N202010141222580001',NULL,'2020-10-14 16:53:19'),
+(19,8,18,10,10,'N202010141223330001',NULL,'2020-10-14 16:53:19'),
+(20,8,18,10,10,'N202010141223560001',NULL,'2020-10-14 16:53:19'),
+(21,8,18,10,10,'N202010141224160001',NULL,'2020-10-14 16:53:19'),
+(22,8,18,10,10,'N202010141224360001',NULL,'2020-10-14 16:53:19'),
+(23,8,17,10,10,'N202010141225030001',NULL,'2020-10-14 16:53:19'),
+(24,8,17,10,10,'N202010141226250001',NULL,'2020-10-14 16:53:19'),
+(25,8,17,10,10,'N202010141227080001',NULL,'2020-10-14 16:53:19'),
+(26,8,17,10,10,'N202010141355360001',NULL,'2020-10-14 16:53:19'),
+(27,8,17,10,10,'N202010141356070001',NULL,'2020-10-14 16:53:19'),
+(28,8,17,10,10,'N202010141401050001',NULL,'2020-10-14 16:53:19'),
+(29,8,17,10,10,'N202010141420590001',NULL,'2020-10-14 16:53:19'),
+(30,8,17,10,10,'N202010141423420001',NULL,'2020-10-14 16:53:19'),
+(31,8,17,10,10,'N202010141424230001',NULL,'2020-10-14 16:53:19'),
+(32,8,17,10,10,'N202010141439100001',NULL,'2020-10-14 16:53:19');
 
 /*Table structure for table `product` */
 
@@ -96,8 +142,8 @@ insert  into `product`(`id`,`name`,`coin`,`price`,`stock`,`subTitle`,`imageurl`,
 (14,'测试商品11',11110,99.97,110,'包邮','img/product/1599105146605.jpg',0,'1599105200576'),
 (15,'测试商品12',12120,99.97,120,'包邮','img/product/1599105146605.jpg',0,'1599105200576'),
 (16,'测试商品13',13130,99.97,130,'包邮','img/product/1599105146605.jpg',99999,'1599105200576'),
-(17,'测试商品14',14140,99.98,130,'不包邮','img/product/1602209739849.jpg',200,'1602209739964'),
-(18,'测试商品15',15150,99.99,15,'包邮','img/product/1602210094530.jpg',102,'1602210094689');
+(17,'测试商品14',14140,99.98,120,'不包邮','img/product/1602209739849.jpg',200,'1602209739964'),
+(18,'测试商品15',15150,99.99,0,'包邮','img/product/1602210094530.jpg',102,'1602210094689');
 
 /*Table structure for table `stepscoin` */
 
@@ -159,7 +205,7 @@ CREATE TABLE `user` (
   `energy_total` float DEFAULT '0' COMMENT '包邮能量',
   `createdate` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
 
 /*Data for the table `user` */
 
@@ -170,8 +216,8 @@ insert  into `user`(`id`,`NAME`,`headimgurl`,`openid`,`unionid`,`phone`,`session
 (4,'Ahau','http://wx.qlogo.cn/mmopen/g3MonUZtNHkdmzicIlibx6iaFqAc56vxLSUfpb6n5WKSYVY0ChQKkiaJSgQ1dZuTOgvLLrhJbERQQ4eMsv84eavHiaiceqxibJxCfHe/0','c_pKo1BoTiyGuiJ-HIvx9Hl_l9JM','c88Iy5mwZiWv9NzCZBdEwGkkwb70',NULL,NULL,NULL,0,0,0,'1598242487681'),
 (5,'亲亲子衿','http://wx.qlogo.cn/mmopen/g3MonUZtNHkdmzicIlibx6iaFqAc56vxLSUfpb6n5WKSYVY0ChQKkiaJSgQ1dZuTOgvLLrhJbERQQ4eMsv84eavHiaiceqxibJxCfHe/0','d_pKo1BoTiyGuiJ-HIvx9Hl_l9JM','d88Iy5mwZiWv9NzCZBdEwGkkwb70',NULL,NULL,NULL,0,0,0,'1598242601667'),
 (7,'知足常乐的小雪儿','http://wx.qlogo.cn/mmopen/g3MonUZtNHkdmzicIlibx6iaFqAc56vxLSUfpb6n5WKSYVY0ChQKkiaJSgQ1dZuTOgvLLrhJbERQQ4eMsv84eavHiaiceqxibJxCfHe/0','e_pKo1BoTiyGuiJ-HIvx9Hl_l9JM','e88Iy5mwZiWv9NzCZBdEwGkkwb70',NULL,NULL,NULL,0,0,0,'1598243186320'),
-(8,'风度','https://thirdwx.qlogo.cn/mmopen/vi_32/A4Dgzwibc1aUG3iaQcH9zNX776yLXQ4u9icus8MUdqDHeqxy4x1x80EgZPSCtqRgjRg5a5Pvs8icCQbW2ia9sibic2XSA/132','oiR4w5TGrBjEb5_MH6kEdur58aDU','okqcDw1qV3GwOoo95sHQIu-G1OIs',NULL,'6rrt1Ykk7PzveXNIiyllbQ==',NULL,0,200000,200,'1600676713850'),
-(11,'輸ㄋ〝风度','https://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTKy2a2yT95r6HGgGYsykL5DS1rIAAWcQSibqn2YsgkaY30hLPJIycc5yopCPovogr0px1I7vJV56Xg/132','oiR4w5eV5ZvJ4EctNtTRRNY2E-Mo','okqcDwyy5fzJjLyAUD4tEezdH8kw',NULL,'DW+XiF7eSHrXOZzBdmxZqw==',NULL,0,200000,102,'2020-09-22 12:20:04');
+(8,'风度','https://thirdwx.qlogo.cn/mmopen/vi_32/A4Dgzwibc1aUG3iaQcH9zNX776yLXQ4u9icus8MUdqDHeqxy4x1x80EgZPSCtqRgjRg5a5Pvs8icCQbW2ia9sibic2XSA/132','oiR4w5TGrBjEb5_MH6kEdur58aDU','okqcDw1qV3GwOoo95sHQIu-G1OIs',NULL,'6rrt1Ykk7PzveXNIiyllbQ==',NULL,0,87850,60490,'1600676713850'),
+(15,'輸ㄋ〝风度','https://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTKy2a2yT95r6HGgGYsykL5DS1rIAAWcQSibqn2YsgkaY30hLPJIycc5yopCPovogr0px1I7vJV56Xg/132','oiR4w5eV5ZvJ4EctNtTRRNY2E-Mo','okqcDwyy5fzJjLyAUD4tEezdH8kw',NULL,'Fjn6iwQyZHAsNGmtGVDzww==',NULL,0,0,0,'2020-10-14 16:53:19');
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

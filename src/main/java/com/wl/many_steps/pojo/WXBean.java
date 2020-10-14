@@ -18,5 +18,5 @@ public class WXBean {
 
     private String iv;//解密向量
 
-    private String referrer;//推荐人
+    private int referrer;//推荐人id
 }

@@ -3,10 +3,8 @@ package com.wl.many_steps.web;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.wl.many_steps.model.ApiResponse;
-import com.wl.many_steps.pojo.User;
-import com.wl.many_steps.pojo.WXBean;
-import com.wl.many_steps.pojo.WXRunDataBean;
-import com.wl.many_steps.pojo.WxCode2SessionBean;
+import com.wl.many_steps.pojo.*;
+import com.wl.many_steps.service.InviteRelaService;
 import com.wl.many_steps.service.UserService;
 import com.wl.many_steps.utils.DateUtils;
 import com.wl.many_steps.utils.WXUtils;
@@ -43,6 +41,8 @@ public class WXController {
 
     @Autowired
     UserService userService;
+    @Autowired
+    InviteRelaService inviteRelaService;
 
     private static RestTemplate restTemplate;
 
@@ -58,15 +58,14 @@ public class WXController {
     }
 
 
-
     @ResponseBody
     @PostMapping(value = "/wxlogin")
     public ApiResponse wxLogin(@Validated @RequestBody WXBean wxBean) {
         String url = "https://api.weixin.qq.com/sns/jscode2session?appid=" + WX_APP_APPID + "&secret=" + WX_APP_SECRET + "&js_code=" + wxBean.getCode() + "&grant_type=authorization_code";
         ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
-        System.out.println(response.getBody());
-        System.out.println(wxBean.getEncryptedData());
-        System.out.println(wxBean.getIv());
+//        System.out.println(response.getBody());
+//        System.out.println(wxBean.getEncryptedData());
+//        System.out.println(wxBean.getIv());
         WxCode2SessionBean bean = JSON.parseObject(response.getBody(), WxCode2SessionBean.class);
         String session_key = bean.getSession_key();
         String openid = bean.getOpenid();
@@ -84,19 +83,31 @@ public class WXController {
             String openId = (String) userInfo.get("openId");
             user.setOpenid(openId);
             String unionId = (String) userInfo.get("unionId");
-            if (!TextUtils.isEmpty(unionId)){
+            if (!TextUtils.isEmpty(unionId)) {
                 user.setUnionid(unionId);
             }
             user.setCreatedate(DateUtils.stampToDate(System.currentTimeMillis()));
             user.setSession_key(session_key);
-            //邀请人功能 待开发
-            System.out.println(userInfo.toJSONString());
             int code = userService.add(user);
-            if (code==0){
-                return ApiResponse.of(999,"操作失败请重试",null);
+            if (code == 0) {
+                return ApiResponse.of(999, "操作失败请重试", null);
+            }
+            //绑定邀请关系
+            User inviteUser = userService.get(wxBean.getReferrer());
+            if (null != inviteUser) {
+                InviteRela inviteRela = new InviteRela();
+                inviteRela.setUid(user.getId());
+                inviteRela.setInviter_id(wxBean.getReferrer());
+                inviteRela.setCreatedate(DateUtils.stampToDate(System.currentTimeMillis()));
+                int add = inviteRelaService.add(inviteRela);
+                if (add == 0) {
+                    System.out.println("绑定邀请关系操作失败");
+                } else {
+                    //发放奖励
+                    System.out.println("发放奖励");
+                }
             }
         }
-
         return ApiResponse.ofSuccess(user);
     }
 
