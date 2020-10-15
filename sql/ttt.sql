@@ -77,14 +77,14 @@ CREATE TABLE `order_` (
   KEY `fk_order__USER` (`uid`),
   KEY `fk_order__product` (`pid`),
   CONSTRAINT `fk_order__USER` FOREIGN KEY (`uid`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8;
 
 /*Data for the table `order_` */
 
 insert  into `order_`(`id`,`uid`,`pid`,`adid`,`STATUS`,`ordercode`,`couriernumber`,`createdate`) values 
-(7,8,18,10,10,'N202010141107290001',NULL,'2020-10-14 16:53:19'),
-(8,8,18,10,10,'N202010141120060001',NULL,'2020-10-14 16:53:19'),
-(9,8,18,10,10,'N202010141205010001',NULL,'2020-10-14 16:53:19'),
+(7,8,18,10,10,'N202010141107290001','13215665153135','2020-10-14 16:53:19'),
+(8,8,18,10,20,'N202010141120060001',NULL,'2020-10-14 16:53:19'),
+(9,8,18,10,30,'N202010141205010001',NULL,'2020-10-14 16:53:19'),
 (10,8,18,10,10,'N202010141207540001',NULL,'2020-10-14 16:53:19'),
 (11,8,18,10,10,'N202010141208540001',NULL,'2020-10-14 16:53:19'),
 (12,8,18,10,10,'N202010141213280001',NULL,'2020-10-14 16:53:19'),
@@ -107,7 +107,10 @@ insert  into `order_`(`id`,`uid`,`pid`,`adid`,`STATUS`,`ordercode`,`couriernumbe
 (29,8,17,10,10,'N202010141420590001',NULL,'2020-10-14 16:53:19'),
 (30,8,17,10,10,'N202010141423420001',NULL,'2020-10-14 16:53:19'),
 (31,8,17,10,10,'N202010141424230001',NULL,'2020-10-14 16:53:19'),
-(32,8,17,10,10,'N202010141439100001',NULL,'2020-10-14 16:53:19');
+(32,8,17,10,10,'N202010141439100001',NULL,'2020-10-14 16:53:19'),
+(33,8,17,10,10,'N202010151527360001',NULL,'2020-10-15 15:27:36'),
+(34,8,17,10,10,'N202010151530470001',NULL,'2020-10-15 15:30:47'),
+(35,8,17,10,10,'N202010151550270001',NULL,'2020-10-15 15:50:27');
 
 /*Table structure for table `product` */
 
@@ -142,7 +145,7 @@ insert  into `product`(`id`,`name`,`coin`,`price`,`stock`,`subTitle`,`imageurl`,
 (14,'测试商品11',11110,99.97,110,'包邮','img/product/1599105146605.jpg',0,'1599105200576'),
 (15,'测试商品12',12120,99.97,120,'包邮','img/product/1599105146605.jpg',0,'1599105200576'),
 (16,'测试商品13',13130,99.97,130,'包邮','img/product/1599105146605.jpg',99999,'1599105200576'),
-(17,'测试商品14',14140,99.98,120,'不包邮','img/product/1602209739849.jpg',200,'1602209739964'),
+(17,'测试商品14',14140,99.98,119,'不包邮','img/product/1602209739849.jpg',200,'1602209739964'),
 (18,'测试商品15',15150,99.99,0,'包邮','img/product/1602210094530.jpg',102,'1602210094689');
 
 /*Table structure for table `stepscoin` */
@@ -152,6 +155,7 @@ DROP TABLE IF EXISTS `stepscoin`;
 CREATE TABLE `stepscoin` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `uid` int(11) DEFAULT NULL COMMENT '用户id',
+  `tran_desc` varchar(255) DEFAULT '步数转金币' COMMENT '交易说明',
   `coin` float DEFAULT '0' COMMENT '单次转换金币',
   `rundate` varchar(20) DEFAULT NULL COMMENT '运动日期',
   `convertsteps` int(11) DEFAULT NULL COMMENT '单次转换步数',
@@ -159,12 +163,13 @@ CREATE TABLE `stepscoin` (
   PRIMARY KEY (`id`),
   KEY `fk_stepscoin_USER` (`uid`),
   CONSTRAINT `fk_stepscoin_USER` FOREIGN KEY (`uid`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 /*Data for the table `stepscoin` */
 
-insert  into `stepscoin`(`id`,`uid`,`coin`,`rundate`,`convertsteps`,`createdate`) values 
-(1,1,3.04,'2020-09-04',3040,'1597652479055');
+insert  into `stepscoin`(`id`,`uid`,`tran_desc`,`coin`,`rundate`,`convertsteps`,`createdate`) values 
+(1,8,'步数转金币',3.04,'2020-09-04',3040,'1597652479055'),
+(5,8,'购买 测试商品14 划扣',-14140,'20201015',0,'2020-10-15 15:50:27');
 
 /*Table structure for table `stepsrecord` */
 

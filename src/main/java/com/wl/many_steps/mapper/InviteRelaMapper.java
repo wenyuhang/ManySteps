@@ -2,6 +2,7 @@ package com.wl.many_steps.mapper;
 
 import com.wl.many_steps.pojo.InviteRela;
 import org.apache.ibatis.annotations.*;
+import org.apache.ibatis.mapping.FetchType;
 
 import java.util.List;
 
@@ -27,9 +28,16 @@ public interface InviteRelaMapper {
     @Select("select * from invite_rela where uid= #{id} ")
     InviteRela get(int id);
 
-    @Select("select * from invite_rela where uid= #{uid} ")
+    @Select("select * from invite_rela where uid= #{uid}")
     List<InviteRela> getByUid(int uid);
 
     @Select("select * from invite_rela where inviter_id= #{inid} ")
+    @Results({
+            @Result(id=true,column="id",property="id"),
+            @Result(column="uid",property="uid"),
+            @Result(column="inviter_id",property="inviter_id"),
+            @Result(column="createdate",property="createdate"),
+            @Result(column="uid",property="user",one=@One(select="com.wl.many_steps.mapper.UserMapper.get",fetchType= FetchType.EAGER))
+    })
     List<InviteRela> getByInviteid(int inid);
 }

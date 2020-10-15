@@ -2,6 +2,7 @@ package com.wl.many_steps.mapper;
 
 import com.wl.many_steps.pojo.Order;
 import org.apache.ibatis.annotations.*;
+import org.apache.ibatis.mapping.FetchType;
 
 import java.util.List;
 
@@ -33,6 +34,17 @@ public interface OrderMapper {
     List<Order> list();
 
     @Select(" select * from order_ where uid= #{uid}")
+    @Results({
+            @Result(id=true,column="id",property="id"),
+            @Result(column="uid",property="uid"),
+            @Result(column="pid",property="pid"),
+            @Result(column="adid",property="adid"),
+            @Result(column="status",property="status"),
+            @Result(column="ordercode",property="ordercode"),
+            @Result(column="couriernumber",property="couriernumber"),
+            @Result(column="createdate",property="createdate"),
+            @Result(column="pid",property="product",one=@One(select="com.wl.many_steps.mapper.ProductMapper.get",fetchType= FetchType.EAGER))
+    })
     List<Order> listByUser(int uid);
 
     @Select(" select * from order_ where pid= #{pid}")

@@ -31,7 +31,7 @@ import java.util.List;
  */
 @Validated
 @RestController
-@RequestMapping(value = "product")
+@RequestMapping(value = "/product")
 public class ProductController {
 
     @Autowired

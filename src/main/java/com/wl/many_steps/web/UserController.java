@@ -3,8 +3,10 @@ package com.wl.many_steps.web;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.wl.many_steps.model.ApiResponse;
+import com.wl.many_steps.pojo.InviteRela;
 import com.wl.many_steps.pojo.PageBean;
 import com.wl.many_steps.pojo.User;
+import com.wl.many_steps.service.InviteRelaService;
 import com.wl.many_steps.service.UserService;
 import org.apache.http.util.TextUtils;
 import org.hibernate.validator.constraints.NotBlank;
@@ -28,6 +30,8 @@ public class UserController {
 
     @Autowired
     UserService userService;
+    @Autowired
+    InviteRelaService inviteRelaService;
 
     @RequestMapping(value = "/userRegister",method = RequestMethod.POST)
     public ApiResponse register(@NotBlank(message = "name 不能为空") String name,
@@ -75,6 +79,19 @@ public class UserController {
     public String getUserStr(@NotBlank(message = "name 不能为空") String name,
                              @NotBlank(message = "age 不能为空")@Max(value = 99, message = "不能大于99岁") String age) {
         return "name: " + name + " ,age:" + age;
+    }
+
+    /**
+     * 获取用户的邀请记录
+     * @param pageBean
+     * @return
+     */
+    @PostMapping(value = "/getInviteRecord")
+    public ApiResponse getInviteRecord(@Validated @RequestBody PageBean pageBean){
+        PageHelper.startPage(pageBean.getPage(),pageBean.getSize());
+        List<InviteRela> list = inviteRelaService.getByInviteid(pageBean.getId());
+        PageInfo pageInfo=new PageInfo(list);
+        return ApiResponse.ofSuccess(pageInfo);
     }
 
 }

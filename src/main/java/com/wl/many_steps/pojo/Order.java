@@ -21,4 +21,5 @@ public class Order {
     private String couriernumber;
     private String createdate;
 
+    private Product product;
 }

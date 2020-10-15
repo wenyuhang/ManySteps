@@ -20,6 +20,8 @@ public class StepsCoin {
 
     private int uid;
 
+    private String tran_desc;
+
     private float coin;
 
     private String rundate;

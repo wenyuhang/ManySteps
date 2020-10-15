@@ -28,6 +28,8 @@ public interface ProductMapper {
     @Select("select * from product where id= #{id} ")
     Product get(int id);
 
+
+
     @Select("select * from product where name= #{name} ")
     Product getByName(String name);
 

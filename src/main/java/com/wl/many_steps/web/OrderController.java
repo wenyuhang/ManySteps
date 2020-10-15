@@ -6,6 +6,7 @@ import com.wl.many_steps.model.ApiResponse;
 import com.wl.many_steps.pojo.*;
 import com.wl.many_steps.service.OrderService;
 import com.wl.many_steps.service.ProductService;
+import com.wl.many_steps.service.StepsCoinService;
 import com.wl.many_steps.service.UserService;
 import com.wl.many_steps.utils.DateUtils;
 import com.wl.many_steps.utils.RandomNumber;
@@ -27,7 +28,7 @@ import java.util.List;
 
 @Validated
 @RestController
-@RequestMapping(value = "order")
+@RequestMapping(value = "/order")
 public class OrderController {
 
     @Autowired
@@ -38,6 +39,9 @@ public class OrderController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    StepsCoinService stepsCoinService;
 
 
     /**
@@ -114,26 +118,11 @@ public class OrderController {
             return ApiResponse.of(999,"操作失败请重试",null);
         }
         //订单插入成功 进行扣款
-        user.setCoin_total(coin_total-coin);
-        user.setEnergy_total(energy_total-energy);
-        int update = userService.update(user);
-        if (update==0){
-            //扣款失败删除订单
-            orderService.deleteByOrderCode(order.getOrdercode());
-            return ApiResponse.of(999,"操作失败请重试",null);
-        }
+        stepsCoinService.add(placeOrderBean.getUid(), "购买" + product.getName() + "划扣", -coin, 0);
+
         //商品进行库存划扣
         product.setStock(stock-1);
-        int updata = productService.updata(product);
-        if (update==0){
-            //扣款失败删除订单
-            orderService.deleteByOrderCode(order.getOrdercode());
-            //恢复余额扣款
-            user.setCoin_total(coin_total);
-//            user.setEnergy_total(energy_total);
-            userService.update(user);
-            return ApiResponse.of(999,"操作失败请重试",null);
-        }
+        productService.updata(product);
 
         return ApiResponse.ofSuccess(order);
     }

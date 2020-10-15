@@ -16,4 +16,6 @@ public class InviteRela {
     private int uid;
     private int inviter_id;
     private String createdate;
+
+    private User user;
 }

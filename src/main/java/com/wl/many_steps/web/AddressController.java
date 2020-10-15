@@ -23,7 +23,7 @@ import javax.validation.constraints.Min;
  */
 @Validated
 @RestController
-@RequestMapping(value = "userinfo")
+@RequestMapping(value = "/userinfo")
 public class AddressController {
     @Autowired
     AddressService addressService;

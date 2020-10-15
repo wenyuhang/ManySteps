@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.wl.many_steps.model.ApiResponse;
 import com.wl.many_steps.pojo.*;
 import com.wl.many_steps.service.InviteRelaService;
+import com.wl.many_steps.service.StepsCoinService;
 import com.wl.many_steps.service.UserService;
 import com.wl.many_steps.utils.DateUtils;
 import com.wl.many_steps.utils.WXUtils;
@@ -43,6 +44,8 @@ public class WXController {
     UserService userService;
     @Autowired
     InviteRelaService inviteRelaService;
+    @Autowired
+    StepsCoinService stepsCoinService;
 
     private static RestTemplate restTemplate;
 
@@ -104,7 +107,7 @@ public class WXController {
                     System.out.println("绑定邀请关系操作失败");
                 } else {
                     //发放奖励
-                    System.out.println("发放奖励");
+                    stepsCoinService.add(inviteUser.getId(), "邀请" + name + "奖励", 10, 0);
                 }
             }
         }
