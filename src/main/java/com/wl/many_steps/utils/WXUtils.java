@@ -16,7 +16,7 @@ import java.util.Arrays;
  * desc   :
  */
 public class WXUtils {
-    public static JSONObject getUserInfo(String encryptedData, String sessionKey, String iv){
+    public static String getUserInfo(String encryptedData, String sessionKey, String iv){
         // 被加密的数据
         byte[] dataByte = Base64.decode(encryptedData);
         // 加密秘钥
@@ -44,7 +44,7 @@ public class WXUtils {
             byte[] resultByte = cipher.doFinal(dataByte);
             if (null != resultByte && resultByte.length > 0) {
                 String result = new String(resultByte, "UTF-8");
-                return JSONObject.parseObject(result);
+                return result;
             }
         } catch (Exception e) {
             e.printStackTrace();

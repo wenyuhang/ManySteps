@@ -27,8 +27,8 @@ public interface StepsCoinMapper {
     @Select("select * from stepscoin where id= #{id} ")
     StepsCoin get(int id);
 
-    @Select("select * from stepscoin where id= #{id} adn rundate=#{rundate}")
-    StepsCoin getByUidAndDate(int uid,String rundate);
+    @Select("select * from stepscoin where id= #{id} and rundate=#{rundate}")
+    StepsCoin getByUidAndDate(@Param("uid")int id,@Param("rundate")String rundate);
 
     @Select(" select * from stepscoin")
     List<StepsCoin> list();

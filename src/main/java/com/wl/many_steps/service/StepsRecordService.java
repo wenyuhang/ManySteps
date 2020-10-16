@@ -2,6 +2,7 @@ package com.wl.many_steps.service;
 
 import com.wl.many_steps.mapper.StepsRecordMapper;
 import com.wl.many_steps.pojo.StepsRecord;
+import org.apache.http.util.TextUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -48,19 +49,20 @@ public class StepsRecordService{
 
     /**
      * 获取步数记录
-     * @param createdate 以天为单位做计算
+     * @param rundate 以天为单位做计算
      * @return
      */
-    public StepsRecord get(int uid,String createdate){
+    public StepsRecord get(int uid,String rundate){
         StepsRecord stepsRecord = null;
-//        try {
-//            stepsRecord = stepsRecordDAO.findByUserAndCreatedate(user,createdate);
-//            if (null==stepsRecord|| TextUtils.isEmpty(stepsRecord.getCreatedate())){
-//                stepsRecord = null;
-//            }
-//        }catch (Exception e){
+        try {
+             stepsRecord = stepsRecordMapper.getByUidAndRundate(uid,rundate);
+            if (null==stepsRecord|| TextUtils.isEmpty(stepsRecord.getCreatedate())){
+                stepsRecord = null;
+            }
+        }catch (Exception e){
 //            stepsRecord = null;
-//        }
+            System.out.println(e);
+        }
         return stepsRecord;
     }
 

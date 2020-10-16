@@ -21,11 +21,14 @@ public interface StepsRecordMapper {
     @Delete(" delete from stepsrecord where id= #{id} ")
     void delete(int id);
 
-    @Update("update stepsrecord set uid=#{sr.uid},coin=#{sr.steps},price=#{sr.rundate},stock=#{sr.convertedsteps},subTitle=#{sr.createdate} where id=#{sr.id} ")
+    @Update("update stepsrecord set uid=#{sr.uid},steps=#{sr.steps},rundate=#{sr.rundate},convertedsteps=#{sr.convertedsteps},createdate=#{sr.createdate} where id=#{sr.id} ")
     int update(@Param("sr") StepsRecord sr);
 
     @Select("select * from stepsrecord where id= #{id} ")
     StepsRecord get(int id);
+
+    @Select("select * from stepsrecord where uid= #{uid} and rundate= #{rundate} ")
+    StepsRecord getByUidAndRundate(@Param("uid")int uid,@Param("rundate")String rundate);
 
     @Select(" select * from stepsrecord")
     List<StepsRecord> list();

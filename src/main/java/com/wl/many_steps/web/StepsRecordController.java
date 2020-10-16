@@ -1,18 +1,23 @@
 package com.wl.many_steps.web;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.wl.many_steps.model.ApiResponse;
-import com.wl.many_steps.pojo.PageBean;
-import com.wl.many_steps.pojo.StepsRecord;
+import com.wl.many_steps.pojo.*;
+import com.wl.many_steps.service.StepsCoinService;
 import com.wl.many_steps.service.StepsRecordService;
+import com.wl.many_steps.service.UserService;
+import com.wl.many_steps.utils.CoinUtils;
+import com.wl.many_steps.utils.DateUtils;
+import com.wl.many_steps.utils.WXUtils;
+import org.apache.http.util.TextUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 
@@ -28,90 +33,117 @@ import java.util.List;
 public class StepsRecordController {
     @Autowired
     StepsRecordService stepsRecordService;
-//    @Autowired
-//    UserService userService;
-//
-//    private  SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
-//
-//    @RequestMapping(value = "/addStepsRecord",method = RequestMethod.POST)
-//    public ApiResponse add(String uid,String steps){
-//        if (TextUtils.isEmpty(uid)){
-//            return ApiResponse.of(999,"uid参数不能为空",null);
-//        }
-//        if (TextUtils.isEmpty(steps)){
-//            return ApiResponse.of(999,"steps参数不能为空",null);
-//        }
-//        try {
-//            Integer.parseInt(steps);
-//        }catch (Exception e){
-//            return ApiResponse.of(999,"steps参数错误",null);
-//        }
-//        //校验获取user对象
-//        User user = null;
-//        try {
-//            user = userService.get(Integer.parseInt(uid));
-//            if (null==user){
-//                throw new Exception();
-//            }
-//        }catch (Exception e){
-//            return ApiResponse.of(999,"uid参数错误，没有此用户",null);
-//        }
-//        //获取当前为哪天
-//        String date = format.format(System.currentTimeMillis());
-//
-//        StepsRecord stepsRecord = stepsRecordService.get(user,date);
-//        if (null==stepsRecord){
-//            stepsRecord = new StepsRecord();
-//            stepsRecord.setUser(user);
-//            stepsRecord.setCreatedate(date);
-//            stepsRecord.setSteps(Integer.parseInt(steps));
-//        }else {
-//            stepsRecord.setSteps(Integer.parseInt(steps));
-//        }
-//        stepsRecord = stepsRecordService.add(stepsRecord);
-//
-//        return ApiResponse.ofSuccess(stepsRecord);
-//    }
-//
-//    @RequestMapping(value = "/exchangeSteps",method = RequestMethod.POST)
-//    public ApiResponse exchange(String uid,String steps){
-//        if (TextUtils.isEmpty(uid)){
-//            return ApiResponse.of(999,"uid参数不能为空",null);
-//        }
-//        if (TextUtils.isEmpty(steps)){
-//            return ApiResponse.of(999,"steps参数不能为空",null);
-//        }
-//        try {
-//            Integer.parseInt(steps);
-//        }catch (Exception e){
-//            return ApiResponse.of(999,"steps参数错误",null);
-//        }
-//        //校验获取user对象
-//        User user = null;
-//        try {
-//            user = userService.get(Integer.parseInt(uid));
-//            if (null==user){
-//                throw new Exception();
-//            }
-//        }catch (Exception e){
-//            return ApiResponse.of(999,"uid参数错误，没有此用户",null);
-//        }
-//        //获取当前为哪天
-//        String date = format.format(System.currentTimeMillis());
-//
-//        StepsRecord stepsRecord = stepsRecordService.get(user,date);
-//        int convertSteps = Integer.parseInt(steps)-stepsRecord.getConvertsteps();
-//        if (null==stepsRecord){
-//            stepsRecord = new StepsRecord();
-//            stepsRecord.setUser(user);
-//            stepsRecord.setCreatedate(date);
-//        }
-//        stepsRecord.setSteps(Integer.parseInt(steps));
-//        stepsRecord.setConvertsteps(convertSteps);
-//        stepsRecord = stepsRecordService.update(stepsRecord);
-//
-//        return ApiResponse.ofSuccess(stepsRecord);
-//    }
+    @Autowired
+    UserService userService;
+    @Autowired
+    StepsCoinService stepsCoinService;
+
+    private  SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+
+    /**
+     * 计算今日可兑换步数
+     * @param wxRunDataBean
+     * @return
+     */
+    @PostMapping(value = "/getRunSteps")
+    public ApiResponse getSteps(@Validated @RequestBody WXRunDataBean wxRunDataBean){
+        //可兑换的步数
+        int steps = 0;
+        //今日运动步数
+        int stepsToday = 0;
+        //今日已兑换步数
+        int convertedsteps = 0;
+
+        //校验用户
+        User user = userService.get(wxRunDataBean.getUid());
+        if (null == user){
+            return ApiResponse.of(999,"用户不存在",null);
+        }
+        //获取当前为哪天
+        String date = format.format(System.currentTimeMillis());
+        StepsRecord stepsRecord = stepsRecordService.get(wxRunDataBean.getUid(), date);
+        if (null!=stepsRecord){
+            stepsToday = stepsRecord.getSteps();
+            convertedsteps = stepsRecord.getConvertedsteps();
+        }else {
+            stepsRecord = new StepsRecord();
+            stepsRecord.setUid(wxRunDataBean.getUid());
+            stepsRecord.setRundate(date);
+            stepsRecord.setSteps(stepsToday);
+            stepsRecord.setConvertedsteps(convertedsteps);
+        }
+        //解密运动数据
+        String json = WXUtils.getUserInfo(wxRunDataBean.getData(), user.getSession_key(), wxRunDataBean.getIv());
+        RunEncryptedData runData = JSON.parseObject(json, RunEncryptedData.class);
+        if (null!=runData){
+            List<RunEncryptedData.StepInfoListBean> stepInfoList = runData.getStepInfoList();
+            if (!stepInfoList.isEmpty()){
+                RunEncryptedData.StepInfoListBean stepInfoListBean = stepInfoList.get(stepInfoList.size() - 1);
+                //比较日期
+                long timestamp = stepInfoListBean.getTimestamp();
+                if (date.equals(format.format(timestamp*1000))){
+                    int runSteps = stepInfoListBean.getStep();
+                    if (runSteps > stepsToday){
+                        stepsToday = runSteps;
+                    }
+                }
+            }
+        }
+        //计算可兑换步数
+        steps = stepsToday - convertedsteps;
+        //插入数据
+        stepsRecord.setSteps(stepsToday);
+        int code = 0;
+        if (TextUtils.isEmpty(stepsRecord.getCreatedate())){
+            //新增
+            stepsRecord.setCreatedate(DateUtils.stampToDate(System.currentTimeMillis()));
+            code = stepsRecordService.add(stepsRecord);
+        }else {
+            //更新
+            stepsRecord.setCreatedate(DateUtils.stampToDate(System.currentTimeMillis()));
+            code = stepsRecordService.update(stepsRecord);
+        }
+
+        if (code==0){
+            System.out.println("微信步数数据插入失败");
+        }
+
+        return ApiResponse.ofSuccess(steps);
+    }
+
+    /**
+     * 步数转金币
+     * @param bean
+     * @return
+     */
+    @PostMapping(value = "/convertSteps")
+    public ApiResponse exchange(@Validated @RequestBody ReqIDBean bean){
+        //校验用户
+        User user = userService.get(bean.getId());
+        if (null == user){
+            return ApiResponse.of(999,"用户不存在",null);
+        }
+        //获取当前为哪天
+        String date = format.format(System.currentTimeMillis());
+        StepsRecord stepsRecord = stepsRecordService.get(bean.getId(), date);
+        if (null==stepsRecord){
+            return ApiResponse.of(999,"兑换金币出现问题，请退出重试",null);
+        }
+        //步数转换金币
+        int steps = stepsRecord.getSteps() - stepsRecord.getConvertedsteps();
+        float coin = CoinUtils.calc(steps);
+        int convertedsteps = stepsRecord.getConvertedsteps()+steps;
+        stepsRecord.setConvertedsteps(convertedsteps);
+        stepsRecord.setCreatedate(DateUtils.stampToDate(System.currentTimeMillis()));
+        int code = stepsRecordService.update(stepsRecord);
+        if (code==0){
+            System.out.println("微信步数数据更新失败");
+            return ApiResponse.of(999,"兑换金币出现问题，请退出重试",null);
+        }
+        //发放奖励
+        stepsCoinService.add(user.getId(), "步数转金币", coin, 0);
+        return ApiResponse.ofSuccess(0);
+    }
 
     /**
      * 获取用户步数记录

@@ -74,7 +74,8 @@ public class WXController {
         String openid = bean.getOpenid();
         User user = userService.get(openid);
         if (null == user) {
-            JSONObject userInfo = WXUtils.getUserInfo(wxBean.getEncryptedData(), session_key, wxBean.getIv());
+
+            JSONObject userInfo = JSONObject.parseObject(WXUtils.getUserInfo(wxBean.getEncryptedData(), session_key, wxBean.getIv()));
             if (userInfo == null) {
                 return ApiResponse.of(999, "数据解析错误，请稍后重试", null);
             }
@@ -110,6 +111,9 @@ public class WXController {
                     stepsCoinService.add(inviteUser.getId(), "邀请" + name + "奖励", 10, 0);
                 }
             }
+        }else {
+            user.setSession_key(session_key);
+            userService.update(user);
         }
         return ApiResponse.ofSuccess(user);
     }
@@ -117,8 +121,9 @@ public class WXController {
     @ResponseBody
     @PostMapping(value = "/wxRunData")
     public String getWXRunData(@Validated @RequestBody WXRunDataBean wxRunDataBean) {
-        JSONObject userInfo = WXUtils.getUserInfo(wxRunDataBean.getData(), "session_key", wxRunDataBean.getIv());
-        System.out.println(userInfo.toJSONString());
-        return userInfo.toJSONString();
+        String userInfo = WXUtils.getUserInfo(wxRunDataBean.getData(), "session_key", wxRunDataBean.getIv());
+
+        System.out.println(userInfo);
+        return userInfo;
     }
 }

@@ -163,13 +163,16 @@ CREATE TABLE `stepscoin` (
   PRIMARY KEY (`id`),
   KEY `fk_stepscoin_USER` (`uid`),
   CONSTRAINT `fk_stepscoin_USER` FOREIGN KEY (`uid`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 
 /*Data for the table `stepscoin` */
 
 insert  into `stepscoin`(`id`,`uid`,`tran_desc`,`coin`,`rundate`,`convertsteps`,`createdate`) values 
 (1,8,'步数转金币',3.04,'2020-09-04',3040,'1597652479055'),
-(5,8,'购买 测试商品14 划扣',-14140,'20201015',0,'2020-10-15 15:50:27');
+(5,8,'购买 测试商品14 划扣',-14140,'20201015',0,'2020-10-15 15:50:27'),
+(7,8,'步数转金币',4.24,'20201016',0,'2020-10-16 17:44:41'),
+(8,8,'步数转金币',4.24,'20201016',0,'2020-10-16 17:54:40'),
+(9,8,'步数转金币',1.02,'20201016',0,'2020-10-16 17:55:26');
 
 /*Table structure for table `stepsrecord` */
 
@@ -185,12 +188,13 @@ CREATE TABLE `stepsrecord` (
   PRIMARY KEY (`id`),
   KEY `fk_stepsrecord_USER` (`uid`),
   CONSTRAINT `fk_stepsrecord_USER` FOREIGN KEY (`uid`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;
 
 /*Data for the table `stepsrecord` */
 
 insert  into `stepsrecord`(`id`,`uid`,`steps`,`rundate`,`convertedsteps`,`createdate`) values 
-(1,1,1028,'2020-09-04',0,'20200817');
+(1,1,1028,'2020-09-04',0,'20200817'),
+(19,8,4240,'20201016',4240,'2020-10-16 18:24:05');
 
 /*Table structure for table `user` */
 
@@ -221,7 +225,7 @@ insert  into `user`(`id`,`NAME`,`headimgurl`,`openid`,`unionid`,`phone`,`session
 (4,'Ahau','http://wx.qlogo.cn/mmopen/g3MonUZtNHkdmzicIlibx6iaFqAc56vxLSUfpb6n5WKSYVY0ChQKkiaJSgQ1dZuTOgvLLrhJbERQQ4eMsv84eavHiaiceqxibJxCfHe/0','c_pKo1BoTiyGuiJ-HIvx9Hl_l9JM','c88Iy5mwZiWv9NzCZBdEwGkkwb70',NULL,NULL,NULL,0,0,0,'1598242487681'),
 (5,'亲亲子衿','http://wx.qlogo.cn/mmopen/g3MonUZtNHkdmzicIlibx6iaFqAc56vxLSUfpb6n5WKSYVY0ChQKkiaJSgQ1dZuTOgvLLrhJbERQQ4eMsv84eavHiaiceqxibJxCfHe/0','d_pKo1BoTiyGuiJ-HIvx9Hl_l9JM','d88Iy5mwZiWv9NzCZBdEwGkkwb70',NULL,NULL,NULL,0,0,0,'1598242601667'),
 (7,'知足常乐的小雪儿','http://wx.qlogo.cn/mmopen/g3MonUZtNHkdmzicIlibx6iaFqAc56vxLSUfpb6n5WKSYVY0ChQKkiaJSgQ1dZuTOgvLLrhJbERQQ4eMsv84eavHiaiceqxibJxCfHe/0','e_pKo1BoTiyGuiJ-HIvx9Hl_l9JM','e88Iy5mwZiWv9NzCZBdEwGkkwb70',NULL,NULL,NULL,0,0,0,'1598243186320'),
-(8,'风度','https://thirdwx.qlogo.cn/mmopen/vi_32/A4Dgzwibc1aUG3iaQcH9zNX776yLXQ4u9icus8MUdqDHeqxy4x1x80EgZPSCtqRgjRg5a5Pvs8icCQbW2ia9sibic2XSA/132','oiR4w5TGrBjEb5_MH6kEdur58aDU','okqcDw1qV3GwOoo95sHQIu-G1OIs',NULL,'6rrt1Ykk7PzveXNIiyllbQ==',NULL,0,87850,60490,'1600676713850'),
+(8,'风度','https://thirdwx.qlogo.cn/mmopen/vi_32/A4Dgzwibc1aUG3iaQcH9zNX776yLXQ4u9icus8MUdqDHeqxy4x1x80EgZPSCtqRgjRg5a5Pvs8icCQbW2ia9sibic2XSA/132','oiR4w5TGrBjEb5_MH6kEdur58aDU','okqcDw1qV3GwOoo95sHQIu-G1OIs',NULL,'Jcp6eth2a6JEFdgzYdxAqA==',NULL,0,87850,60490,'1600676713850'),
 (15,'輸ㄋ〝风度','https://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTKy2a2yT95r6HGgGYsykL5DS1rIAAWcQSibqn2YsgkaY30hLPJIycc5yopCPovogr0px1I7vJV56Xg/132','oiR4w5eV5ZvJ4EctNtTRRNY2E-Mo','okqcDwyy5fzJjLyAUD4tEezdH8kw',NULL,'Fjn6iwQyZHAsNGmtGVDzww==',NULL,0,0,0,'2020-10-14 16:53:19');
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
