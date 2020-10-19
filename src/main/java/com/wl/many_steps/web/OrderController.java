@@ -12,10 +12,7 @@ import com.wl.many_steps.utils.DateUtils;
 import com.wl.many_steps.utils.RandomNumber;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -63,14 +60,10 @@ public class OrderController {
         float coin = product.getCoin();
         float energy = product.getEnergy();
         float coin_total = user.getCoin_total();
-        float energy_total = user.getEnergy_total();
 
         if (coin_total<coin){
             return ApiResponse.of(999,"金币余额不足",null);
         }
-//        if (energy_total<energy){
-//            return ApiResponse.of(999,"包邮能量不足",null);
-//        }
         return ApiResponse.ofSuccess(null);
     }
 
@@ -94,7 +87,6 @@ public class OrderController {
         float energy = product.getEnergy();
         int stock = product.getStock();
         float coin_total = user.getCoin_total();
-        float energy_total = user.getEnergy_total();
 
         if (stock<=0){
             return ApiResponse.of(999,"商品已被兑换完毕，工作人员正在加紧补货！~",null);
@@ -102,9 +94,6 @@ public class OrderController {
         if (coin_total<coin){
             return ApiResponse.of(999,"金币余额不足",null);
         }
-//        if (energy_total<energy){
-//            return ApiResponse.of(999,"包邮能量不足",null);
-//        }
         //创建订单
         Order order = new Order();
         order.setUid(placeOrderBean.getUid());
@@ -128,7 +117,7 @@ public class OrderController {
     }
 
     /**
-     * 获取历史订单
+     * 获取单个用户的历史订单
      * @param pageBean
      * @return
      */
@@ -136,6 +125,20 @@ public class OrderController {
     public ApiResponse myOrder(@Validated @RequestBody PageBean pageBean){
         PageHelper.startPage(pageBean.getPage(), pageBean.getSize());
         List<Order> list = orderService.listByUid(pageBean.getId());
+        PageInfo pageInfo = new PageInfo(list);
+        return ApiResponse.ofSuccess(pageInfo);
+    }
+
+    /**
+     * 获取商品列表
+     *
+     * @param pageBean
+     * @return
+     */
+    @PostMapping(value = "/orderList")
+    public ApiResponse list(@Validated @RequestBody PageBean pageBean) {
+        PageHelper.startPage(pageBean.getPage(), pageBean.getSize());
+        List<Order> list = orderService.list();
         PageInfo pageInfo = new PageInfo(list);
         return ApiResponse.ofSuccess(pageInfo);
     }

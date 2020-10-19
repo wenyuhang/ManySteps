@@ -1,6 +1,7 @@
 package com.wl.many_steps.mapper;
 
 import com.wl.many_steps.pojo.InviteRela;
+import com.wl.many_steps.pojo.StepsCoin;
 import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.mapping.FetchType;
 
@@ -27,6 +28,9 @@ public interface InviteRelaMapper {
 
     @Select("select * from invite_rela where uid= #{id} ")
     InviteRela get(int id);
+
+    @Select("SELECT COUNT(${inviter_id}) FROM invite_rela")
+    int getInviteNum(@Param("inviter_id")int inviter_id);
 
     @Select("select * from invite_rela where uid= #{uid}")
     List<InviteRela> getByUid(int uid);

@@ -14,4 +14,8 @@ public class CoinUtils {
     public static float calc(float a) {
         return Float.parseFloat(dF.format((float)a/1000));
     }
+
+    public static float format(float a){
+        return Float.parseFloat(dF.format(a));
+    }
 }

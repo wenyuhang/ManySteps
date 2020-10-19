@@ -22,4 +22,6 @@ public class Order {
     private String createdate;
 
     private Product product;
+
+    private User user;
 }

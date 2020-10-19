@@ -42,7 +42,15 @@ public class OrderService {
      * @return
      */
     public List<Order> listByUid(int uid){
-        return orderMapper.listByUser(uid);
+        return orderMapper.userList(uid);
+    }
+
+    /**
+     * 获取全部订单
+     * @return
+     */
+    public List<Order> list(){
+        return orderMapper.list();
     }
 
 }

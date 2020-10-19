@@ -12,9 +12,9 @@ import java.util.List;
  * desc   :
  */
 public interface UserMapper {
-    @Insert(" insert into user ( name,headimgurl,openid,unionid,phone,session_key,access_token,steps_total,coin_total,energy_total,createdate) " +
+    @Insert(" insert into user ( name,headimgurl,openid,unionid,phone,session_key,access_token,steps_total,coin_total,invite_total,createdate) " +
             "values (#{user.name},#{user.headimgurl},#{user.openid},#{user.unionid},#{user.phone},#{user.session_key},#{user.access_token}," +
-            "#{user.steps_total},#{user.coin_total},#{user.energy_total},#{user.createdate}) ")
+            "#{user.steps_total},#{user.coin_total},#{user.invite_total},#{user.createdate}) ")
     @Options(useGeneratedKeys=true, keyProperty="user.id", keyColumn="id")
     int add(@Param("user")User user);
 
@@ -28,7 +28,7 @@ public interface UserMapper {
     User getByOpenid(String openid);
 
     @Update("update user set name=#{user.name},headimgurl=#{user.headimgurl},openid=#{user.openid},phone=#{user.phone},session_key=#{user.session_key}," +
-            "access_token=#{user.access_token},steps_total=#{user.steps_total},coin_total=#{user.coin_total},energy_total=#{user.energy_total}," +
+            "access_token=#{user.access_token},steps_total=#{user.steps_total},coin_total=#{user.coin_total},invite_total=#{user.invite_total}," +
             "createdate=#{user.createdate} where id=#{user.id}")
     int update(@Param("user") User user);
 

@@ -45,6 +45,10 @@ public class InviteRelaService {
 
     }
 
+    public int getInviteNum(int inid){
+        return inviteRelaMapper.getInviteNum(inid);
+    }
+
     public List<InviteRela> getByUid(int uid){
         return inviteRelaMapper.getByUid(uid);
     }

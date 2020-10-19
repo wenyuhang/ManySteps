@@ -27,8 +27,11 @@ public interface StepsCoinMapper {
     @Select("select * from stepscoin where id= #{id} ")
     StepsCoin get(int id);
 
-    @Select("select * from stepscoin where id= #{id} and rundate=#{rundate}")
-    StepsCoin getByUidAndDate(@Param("uid")int id,@Param("rundate")String rundate);
+    @Select("select * from stepscoin where uid= #{uid} and rundate=#{rundate}")
+    StepsCoin getDataToday(@Param("uid")int uid,@Param("rundate")String rundate);
+
+    @Select("SELECT SUM(coin) AS coin FROM stepscoin WHERE uid= #{uid}")
+    float sumCoin(@Param("uid")int uid);
 
     @Select(" select * from stepscoin")
     List<StepsCoin> list();

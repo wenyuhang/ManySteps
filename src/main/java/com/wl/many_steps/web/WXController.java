@@ -60,7 +60,11 @@ public class WXController {
         }
     }
 
-
+    /**
+     * 微信登录 注册
+     * @param wxBean
+     * @return
+     */
     @ResponseBody
     @PostMapping(value = "/wxlogin")
     public ApiResponse wxLogin(@Validated @RequestBody WXBean wxBean) {
@@ -118,6 +122,11 @@ public class WXController {
         return ApiResponse.ofSuccess(user);
     }
 
+    /**
+     * 解密微信步数
+     * @param wxRunDataBean
+     * @return
+     */
     @ResponseBody
     @PostMapping(value = "/wxRunData")
     public String getWXRunData(@Validated @RequestBody WXRunDataBean wxRunDataBean) {

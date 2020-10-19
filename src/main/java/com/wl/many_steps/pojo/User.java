@@ -27,6 +27,7 @@ public class User {
 
     private String unionid;
 
+    @JsonBackReference
     private String session_key;
 
     private String access_token;
@@ -37,7 +38,7 @@ public class User {
 
     private float coin_total;
 
-    private float energy_total;
+    private int invite_total;
 
     private String createdate;
 }

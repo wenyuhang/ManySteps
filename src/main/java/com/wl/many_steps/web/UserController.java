@@ -5,8 +5,10 @@ import com.github.pagehelper.PageInfo;
 import com.wl.many_steps.model.ApiResponse;
 import com.wl.many_steps.pojo.InviteRela;
 import com.wl.many_steps.pojo.PageBean;
+import com.wl.many_steps.pojo.ReqIDBean;
 import com.wl.many_steps.pojo.User;
 import com.wl.many_steps.service.InviteRelaService;
+import com.wl.many_steps.service.StepsCoinService;
 import com.wl.many_steps.service.UserService;
 import org.apache.http.util.TextUtils;
 import org.hibernate.validator.constraints.NotBlank;
@@ -32,36 +34,15 @@ public class UserController {
     UserService userService;
     @Autowired
     InviteRelaService inviteRelaService;
-
-    @RequestMapping(value = "/userRegister",method = RequestMethod.POST)
-    public ApiResponse register(@NotBlank(message = "name 不能为空") String name,
-                                @NotBlank(message = "headimgurl 不能为空") String headimgurl,
-                                @NotBlank(message = "openid 不能为空") String openid,
-                                @NotBlank(message = "unionid 不能为空") String unionid,String phone){
-
-        //检测用户是否注册
-        User user = userService.get(openid);
-        if (null==user){
-            user = new User();
-            user.setName(name);
-            user.setHeadimgurl(headimgurl);
-            user.setOpenid(openid);
-            user.setCreatedate(String.valueOf(System.currentTimeMillis()));
-            if (!TextUtils.isEmpty(unionid)){
-                user.setUnionid(unionid);
-            }
-            if (!TextUtils.isEmpty(phone)){
-                user.setPhone(phone);
-            }
-           int code = userService.add(user);
-            if (code==0){
-                return ApiResponse.of(999,"操作失败请重试",null);
-            }
-        }
-        return ApiResponse.ofSuccess(user);
-    }
+    @Autowired
+    StepsCoinService stepsCoinService;
 
 
+    /**
+     * 获取用户列表
+     * @param pageBean
+     * @return
+     */
     @RequestMapping(value = "/userList",method = RequestMethod.POST)
     public ApiResponse list(@Validated @RequestBody PageBean pageBean){
         PageHelper.startPage(pageBean.getPage(),pageBean.getSize());
@@ -70,16 +51,31 @@ public class UserController {
         return ApiResponse.ofSuccess(pageInfo);
     }
 
-    @RequestMapping(value = "/hello")
-    public String hello(){
-        return "hello world";
+    /**
+     * 获取用户信息
+     * @param req
+     * @return
+     */
+    @PostMapping(value = "/getUserInfo")
+    public ApiResponse get(@Validated @RequestBody ReqIDBean req){
+        User user = userService.get(req.getId());
+        if (null==user){
+            return ApiResponse.of(999,"用户不存在",null);
+        }
+        //计算金币总和
+        float coin_total = stepsCoinService.sum(user.getId());
+        //计算邀请人数个和
+        int invite_total = inviteRelaService.getInviteNum(user.getId());
+        //更新用户数据库
+        user.setCoin_total(coin_total);
+        user.setInvite_total(invite_total);
+        int code = userService.update(user);
+        if (code==0){
+            return ApiResponse.of(999,"操作失败，请稍后重试",null);
+        }
+        return ApiResponse.ofSuccess(user);
     }
 
-    @GetMapping("/getUser")
-    public String getUserStr(@NotBlank(message = "name 不能为空") String name,
-                             @NotBlank(message = "age 不能为空")@Max(value = 99, message = "不能大于99岁") String age) {
-        return "name: " + name + " ,age:" + age;
-    }
 
     /**
      * 获取用户的邀请记录

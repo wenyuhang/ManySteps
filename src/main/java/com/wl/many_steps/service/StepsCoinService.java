@@ -2,6 +2,7 @@ package com.wl.many_steps.service;
 
 import com.wl.many_steps.mapper.StepsCoinMapper;
 import com.wl.many_steps.pojo.StepsCoin;
+import com.wl.many_steps.utils.CoinUtils;
 import com.wl.many_steps.utils.DateUtils;
 import org.apache.http.util.TextUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,6 +59,15 @@ public class StepsCoinService {
     }
 
     /**
+     * 计算用户金币总和
+     * @param uid
+     * @return
+     */
+    public float sum(int uid){
+        return CoinUtils.format(stepsCoinMapper.sumCoin(uid));
+    }
+
+    /**
      * 获取步数记录
      * @param createdate 以天为单位做计算
      * @return
@@ -65,7 +75,7 @@ public class StepsCoinService {
     public StepsCoin get(int uid,String createdate){
         StepsCoin stepsRecord = null;
         try {
-            stepsRecord = stepsCoinMapper.getByUidAndDate(uid,createdate);
+            stepsRecord = stepsCoinMapper.getDataToday(uid,createdate);
             if (null==stepsRecord|| TextUtils.isEmpty(stepsRecord.getCreatedate())){
                 stepsRecord = null;
             }
