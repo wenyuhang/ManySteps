@@ -1,12 +1,12 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:include="/include/adminHeader::html">
+<head th:include="include/adminHeader::html">
     <title>hello</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 
 </head>
 <body>
-<div th:replace="/include/adminNavigator::html"></div>
+<div th:replace="include/adminNavigator::html"></div>
 <script>
     $(function () {
         var data4Vue = {

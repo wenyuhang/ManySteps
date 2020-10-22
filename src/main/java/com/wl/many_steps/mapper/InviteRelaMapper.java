@@ -29,8 +29,9 @@ public interface InviteRelaMapper {
     @Select("select * from invite_rela where uid= #{id} ")
     InviteRela get(int id);
 
-    @Select("SELECT COUNT(${inviter_id}) FROM invite_rela")
-    int getInviteNum(@Param("inviter_id")int inviter_id);
+
+    @Select("SELECT COUNT(inviter_id) FROM invite_rela WHERE inviter_id= #{inviter_id}")
+    int getInviteNum(int inviter_id);
 
     @Select("select * from invite_rela where uid= #{uid}")
     List<InviteRela> getByUid(int uid);
