@@ -185,7 +185,8 @@ public class ProductController {
     public String saveOrUpdateImageFile(MultipartFile image, HttpServletRequest request) {
         String filePath = null;
         try {
-            File imageFolder = new File(request.getServletContext().getRealPath("img/product"));
+//            File imageFolder = new File(request.getServletContext().getRealPath("img/product"));
+            File imageFolder = new File("/root/work/img/product");
             File file = new File(imageFolder, System.currentTimeMillis() + ".jpg");
             if (!file.getParentFile().exists())
                 file.getParentFile().mkdirs();
