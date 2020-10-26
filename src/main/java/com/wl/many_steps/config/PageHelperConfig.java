@@ -34,37 +34,39 @@ public class PageHelperConfig {
         return pageHelper;
     }
 
-    @Value("${server.port.http}")
-    private int serverPortHttp;
 
-    @Value("${server.port}")
-    private int serverPortHttps;
-
-    @Bean
-    public ServletWebServerFactory servletWebServerFactory() {
-        TomcatServletWebServerFactory factory = new TomcatServletWebServerFactory() {
-            @Override
-            protected void postProcessContext(Context context) {
-                SecurityConstraint securityConstraint = new SecurityConstraint();
-                securityConstraint.setUserConstraint("CONFIDENTIAL");
-                SecurityCollection securityCollection = new SecurityCollection();
-                securityCollection.addPattern("/*");
-                securityConstraint.addCollection(securityCollection);
-                context.addConstraint(securityConstraint);
-            }
-        };
-        factory.addAdditionalTomcatConnectors(redirectConnector());
-        return factory;
-    }
-
-    private Connector redirectConnector() {
-        Connector connector = new Connector(Http11NioProtocol.class.getName());
-        connector.setScheme("http");
-        connector.setPort(serverPortHttp);
-        connector.setSecure(false);
-        connector.setRedirectPort(serverPortHttps);
-        return connector;
-    }
+//    //配置SSL证书
+//    @Value("${server.port.http}")
+//    private int serverPortHttp;
+//
+//    @Value("${server.port}")
+//    private int serverPortHttps;
+//
+//    @Bean
+//    public ServletWebServerFactory servletWebServerFactory() {
+//        TomcatServletWebServerFactory factory = new TomcatServletWebServerFactory() {
+//            @Override
+//            protected void postProcessContext(Context context) {
+//                SecurityConstraint securityConstraint = new SecurityConstraint();
+//                securityConstraint.setUserConstraint("CONFIDENTIAL");
+//                SecurityCollection securityCollection = new SecurityCollection();
+//                securityCollection.addPattern("/*");
+//                securityConstraint.addCollection(securityCollection);
+//                context.addConstraint(securityConstraint);
+//            }
+//        };
+//        factory.addAdditionalTomcatConnectors(redirectConnector());
+//        return factory;
+//    }
+//
+//    private Connector redirectConnector() {
+//        Connector connector = new Connector(Http11NioProtocol.class.getName());
+//        connector.setScheme("http");
+//        connector.setPort(serverPortHttp);
+//        connector.setSecure(false);
+//        connector.setRedirectPort(serverPortHttps);
+//        return connector;
+//    }
 
 
 
