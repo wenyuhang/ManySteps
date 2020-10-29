@@ -10,6 +10,7 @@ import com.wl.many_steps.utils.ImageUtil;
 import org.apache.http.util.TextUtils;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -36,6 +37,9 @@ public class ProductController {
 
     @Autowired
     ProductService productService;
+
+    @Value("${pro.img.path}")
+    private String path;
 
 
     /**
@@ -186,7 +190,7 @@ public class ProductController {
         String filePath = null;
         try {
 //            File imageFolder = new File(request.getServletContext().getRealPath("img/product"));
-            File imageFolder = new File("/root/work/img/product");
+            File imageFolder = new File(path);
             File file = new File(imageFolder, System.currentTimeMillis() + ".jpg");
             if (!file.getParentFile().exists())
                 file.getParentFile().mkdirs();
