@@ -37,7 +37,7 @@ public class ExceptionHandler {
     @ResponseBody
     public ApiResponse jsonErrorHandler(Exception exception) {
         log.error("【Exception】:{}", exception.getMessage());
-        return ApiResponse.of(999, exception.getMessage(), null);
+        return ApiResponse.of(999, "操作失败，请稍后重试", null);
     }
     /**
      * 统一 json 异常处理
