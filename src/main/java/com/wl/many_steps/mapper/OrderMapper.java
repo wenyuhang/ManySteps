@@ -55,10 +55,24 @@ public interface OrderMapper {
             @Result(column="ordercode",property="ordercode"),
             @Result(column="couriernumber",property="couriernumber"),
             @Result(column="createdate",property="createdate"),
-            @Result(column="pid",property="product",one=@One(select="com.wl.many_steps.mapper.ProductMapper.get",fetchType= FetchType.EAGER))
+            @Result(column="pid",property="product",one=@One(select="com.wl.many_steps.mapper.ProductMapper.get",fetchType= FetchType.EAGER)),
+            @Result(column="uid",property="user",one=@One(select="com.wl.many_steps.mapper.UserMapper.get",fetchType= FetchType.EAGER))
     })
     List<Order> userList(int uid);
 
+
     @Select(" select * from order_ where pid= #{pid}")
-    List<Order> listByProduct(int pid);
+    @Results({
+            @Result(id=true,column="id",property="id"),
+            @Result(column="uid",property="uid"),
+            @Result(column="pid",property="pid"),
+            @Result(column="adid",property="adid"),
+            @Result(column="status",property="status"),
+            @Result(column="ordercode",property="ordercode"),
+            @Result(column="couriernumber",property="couriernumber"),
+            @Result(column="createdate",property="createdate"),
+            @Result(column="pid",property="product",one=@One(select="com.wl.many_steps.mapper.ProductMapper.get",fetchType= FetchType.EAGER)),
+            @Result(column="uid",property="user",one=@One(select="com.wl.many_steps.mapper.UserMapper.get",fetchType= FetchType.EAGER))
+    })
+    List<Order> productList(int pid);
 }

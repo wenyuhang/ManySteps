@@ -48,6 +48,15 @@ public class StepsRecordService{
     }
 
     /**
+     * 计算步数总和
+     * @param uid
+     * @return
+     */
+    public int sum(int uid){
+        return stepsRecordMapper.sumSteps(uid);
+    }
+
+    /**
      * 获取步数记录
      * @param rundate 以天为单位做计算
      * @return

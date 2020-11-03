@@ -32,11 +32,25 @@
             methods: {
                 // 查询订单列表
                 list: function (start) {
-                    var url = "../steps/order/orderList"
-                    axios.post(url, {page: start, size: 10}).then(function (response) {
+                    var uid = getUrlParms("uid");
+                    var pid = getUrlParms("pid");
+                    var url = '../steps/order/orderList';
+                    var id = 0;
+                    if (uid>0){
+                        url = "../steps/order/orderListByUser";
+                        id = uid;
+                    }else if (pid>0){
+                        url = "../steps/order/orderListByProduct";
+                        id = pid;
+                    } else {
+                        url = "../steps/order/orderList"
+                        id = 0;
+                    }
+
+                    axios.post(url, {page: start, size: 10,id:id}).then(function (response) {
                         // var jsonObject = response.data.data;
                         // var jsonString = JSON.stringify(jsonObject)
-                        // document.getElementById("hero").innerHTML = "通过 axios 获取到的json数据：" + jsonString;
+                        // document.getElementById("hero").innerHTML = id+"通过 axios 获取到的json数据：" + jsonString;
                         vue.pagination = response.data.data;
                         vue.beans = response.data.data.list;
                     })

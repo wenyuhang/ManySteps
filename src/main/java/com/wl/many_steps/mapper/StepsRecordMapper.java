@@ -27,6 +27,9 @@ public interface StepsRecordMapper {
     @Select("select * from stepsrecord where id= #{id} ")
     StepsRecord get(int id);
 
+    @Select("SELECT COALESCE(SUM(steps),0) AS stepsrecord FROM stepsrecord WHERE uid = #{uid}")
+    int sumSteps(@Param("uid")int uid);
+
     @Select("select * from stepsrecord where uid= #{uid} and rundate= #{rundate} ")
     StepsRecord getByUidAndRundate(@Param("uid")int uid,@Param("rundate")String rundate);
 

@@ -45,6 +45,17 @@ public class OrderService {
         return orderMapper.userList(uid);
     }
 
+
+    /**
+     * 根据商品id获取历史订单
+     * @param uid
+     * @return
+     */
+    public List<Order> listByPid(int uid){
+        return orderMapper.productList(uid);
+    }
+
+
     /**
      * 获取全部订单
      * @return

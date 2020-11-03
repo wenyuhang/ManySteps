@@ -43,44 +43,46 @@ public class OrderController {
 
     /**
      * 下单前 查询余额
+     *
      * @param balanceBean
      * @return
      */
     @PostMapping(value = "/checkBalance")
-    public ApiResponse check(@Validated @RequestBody BalanceBean balanceBean){
+    public ApiResponse check(@Validated @RequestBody BalanceBean balanceBean) {
 
         User user = userService.get(balanceBean.getUid());
-        if (null==user){
-            return ApiResponse.of(999,"用户不存在",null);
+        if (null == user) {
+            return ApiResponse.of(999, "用户不存在", null);
         }
         Product product = productService.get(balanceBean.getPid());
-        if (null==product) {
+        if (null == product) {
             return ApiResponse.of(999, "商品不存在", null);
         }
         float coin = product.getCoin();
         float energy = product.getEnergy();
         float coin_total = user.getCoin_total();
 
-        if (coin_total<coin){
-            return ApiResponse.of(999,"金币余额不足",null);
+        if (coin_total < coin) {
+            return ApiResponse.of(999, "金币余额不足", null);
         }
         return ApiResponse.ofSuccess(null);
     }
 
     /**
      * 用户进行下单 扣款
+     *
      * @param placeOrderBean
      * @return
      */
     @PostMapping(value = "/placeOrder")
-    public ApiResponse placeOrder(@Validated @RequestBody PlaceOrderBean placeOrderBean){
+    public ApiResponse placeOrder(@Validated @RequestBody PlaceOrderBean placeOrderBean) {
         //检查余额
         User user = userService.get(placeOrderBean.getUid());
-        if (null==user){
-            return ApiResponse.of(999,"用户不存在",null);
+        if (null == user) {
+            return ApiResponse.of(999, "用户不存在", null);
         }
         Product product = productService.get(placeOrderBean.getPid());
-        if (null==product) {
+        if (null == product) {
             return ApiResponse.of(999, "商品不存在", null);
         }
         float coin = product.getCoin();
@@ -88,11 +90,11 @@ public class OrderController {
         int stock = product.getStock();
         float coin_total = user.getCoin_total();
 
-        if (stock<=0){
-            return ApiResponse.of(999,"商品已被兑换完毕，工作人员正在加紧补货！~",null);
+        if (stock <= 0) {
+            return ApiResponse.of(999, "商品已被兑换完毕，工作人员正在加紧补货！~", null);
         }
-        if (coin_total<coin){
-            return ApiResponse.of(999,"金币余额不足",null);
+        if (coin_total < coin) {
+            return ApiResponse.of(999, "金币余额不足", null);
         }
         //创建订单
         Order order = new Order();
@@ -103,14 +105,14 @@ public class OrderController {
         order.setStatus(10);
         order.setCreatedate(DateUtils.stampToDate(System.currentTimeMillis()));
         int code = orderService.add(order);
-        if (code==0){
-            return ApiResponse.of(999,"操作失败请重试",null);
+        if (code == 0) {
+            return ApiResponse.of(999, "操作失败请重试", null);
         }
         //订单插入成功 进行扣款
         stepsCoinService.add(placeOrderBean.getUid(), "购买" + product.getName() + "划扣", -coin, 0);
 
         //商品进行库存划扣
-        product.setStock(stock-1);
+        product.setStock(stock - 1);
         productService.updata(product);
 
         return ApiResponse.ofSuccess(order);
@@ -118,11 +120,12 @@ public class OrderController {
 
     /**
      * 获取单个用户的历史订单
+     *
      * @param pageBean
      * @return
      */
     @PostMapping(value = "/myOrder")
-    public ApiResponse myOrder(@Validated @RequestBody PageBean pageBean){
+    public ApiResponse myOrder(@Validated @RequestBody PageBean pageBean) {
         PageHelper.startPage(pageBean.getPage(), pageBean.getSize());
         List<Order> list = orderService.listByUid(pageBean.getId());
         PageInfo pageInfo = new PageInfo(list);
@@ -139,6 +142,34 @@ public class OrderController {
     public ApiResponse list(@Validated @RequestBody PageBean pageBean) {
         PageHelper.startPage(pageBean.getPage(), pageBean.getSize());
         List<Order> list = orderService.list();
+        PageInfo pageInfo = new PageInfo(list);
+        return ApiResponse.ofSuccess(pageInfo);
+    }
+
+    /**
+     * 获取商品列表
+     *
+     * @param pageBean
+     * @return
+     */
+    @PostMapping(value = "/orderListByUser")
+    public ApiResponse listByUser(@Validated @RequestBody PageBean pageBean) {
+        PageHelper.startPage(pageBean.getPage(), pageBean.getSize());
+        List<Order> list = orderService.listByUid(pageBean.getId());
+        PageInfo pageInfo = new PageInfo(list);
+        return ApiResponse.ofSuccess(pageInfo);
+    }
+
+    /**
+     * 获取商品列表
+     *
+     * @param pageBean
+     * @return
+     */
+    @PostMapping(value = "/orderListByProduct")
+    public ApiResponse listByProduct(@Validated @RequestBody PageBean pageBean) {
+        PageHelper.startPage(pageBean.getPage(), pageBean.getSize());
+        List<Order> list = orderService.listByPid(pageBean.getId());
         PageInfo pageInfo = new PageInfo(list);
         return ApiResponse.ofSuccess(pageInfo);
     }

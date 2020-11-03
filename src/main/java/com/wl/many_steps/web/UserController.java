@@ -9,8 +9,10 @@ import com.wl.many_steps.pojo.ReqIDBean;
 import com.wl.many_steps.pojo.User;
 import com.wl.many_steps.service.InviteRelaService;
 import com.wl.many_steps.service.StepsCoinService;
+import com.wl.many_steps.service.StepsRecordService;
 import com.wl.many_steps.service.UserService;
 import org.apache.http.util.TextUtils;
+import org.aspectj.lang.annotation.Aspect;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -36,6 +38,8 @@ public class UserController {
     InviteRelaService inviteRelaService;
     @Autowired
     StepsCoinService stepsCoinService;
+    @Autowired
+    StepsRecordService stepsRecordService;
 
 
     /**
@@ -64,10 +68,13 @@ public class UserController {
         }
         //计算金币总和
         float coin_total = stepsCoinService.sum(user.getId());
+        //计算步数总和
+        int steps_total = stepsRecordService.sum(user.getId());
         //计算邀请人数个和
         int invite_total = inviteRelaService.getInviteNum(user.getId());
         //更新用户数据库
         user.setCoin_total(coin_total);
+        user.setSteps_total(steps_total);
         user.setInvite_total(invite_total);
         int code = userService.update(user);
         if (code==0){
