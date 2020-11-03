@@ -190,8 +190,11 @@ public class ProductController {
         String filePath = null;
         try {
 //            File imageFolder = new File(request.getServletContext().getRealPath("img/product"));
+            System.out.println(path);
             File imageFolder = new File(path);
+            System.out.println(imageFolder.getAbsolutePath());
             File file = new File(imageFolder, System.currentTimeMillis() + ".jpg");
+            System.out.println(file.getAbsolutePath());
             if (!file.getParentFile().exists())
                 file.getParentFile().mkdirs();
             image.transferTo(file);
@@ -201,6 +204,7 @@ public class ProductController {
             System.out.println(file.getAbsolutePath());
         } catch (IOException e) {
             filePath = null;
+            System.out.println(e);
         }
         return filePath;
     }

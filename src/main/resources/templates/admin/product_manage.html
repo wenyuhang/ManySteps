@@ -86,7 +86,7 @@
                         alert(response.data.message);
                         if (200 == response.data.code) {
                             //刷新列表
-                            vue.list(vue.pagination.lastPage);
+                            vue.list(vue.pagination.pageNum);
                             //清空输入框数据
                             $("#singlePic").val('');
                             vue.bean =  {id:0,name:'','coin':0,'energy':0,'price':99.98,'stock':99,'subTitle':'',imagefile:null};
