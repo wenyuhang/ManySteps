@@ -170,6 +170,13 @@ public class OrderController {
     public ApiResponse listByProduct(@Validated @RequestBody PageBean pageBean) {
         PageHelper.startPage(pageBean.getPage(), pageBean.getSize());
         List<Order> list = orderService.listByPid(pageBean.getId());
+        //APP端请求 转换距今日期
+        if (pageBean.getIsApp()==1){
+            for (Order order:list) {
+                String str = DateUtils.calcDistanceTime(order.getCreatedate());
+                order.setDistancedate(str);
+            }
+        }
         PageInfo pageInfo = new PageInfo(list);
         return ApiResponse.ofSuccess(pageInfo);
     }

@@ -86,6 +86,12 @@ public class ProductController {
         return ApiResponse.ofSuccess(product);
     }
 
+    @RequestMapping(value = "/test", method = RequestMethod.POST)
+    public ApiResponse sss(String username,String password) {
+        System.out.println(username+"============"+password);
+        return ApiResponse.of(10000,"操作成功",null);
+    }
+
     /**
      * 删除商品
      *

@@ -32,6 +32,6 @@ public interface UserMapper {
             "createdate=#{user.createdate} where id=#{user.id}")
     int update(@Param("user") User user);
 
-    @Select(" select * from user ")
+    @Select(" select * from user ORDER BY createdate DESC")
     List<User> list();
 }

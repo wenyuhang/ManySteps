@@ -33,10 +33,10 @@ public interface InviteRelaMapper {
     @Select("SELECT COUNT(inviter_id) FROM invite_rela WHERE inviter_id= #{inviter_id}")
     int getInviteNum(int inviter_id);
 
-    @Select("select * from invite_rela where uid= #{uid}")
+    @Select("select * from invite_rela where uid= #{uid} ORDER BY createdate DESC")
     List<InviteRela> getByUid(int uid);
 
-    @Select("select * from invite_rela where inviter_id= #{inid} ")
+    @Select("select * from invite_rela where inviter_id= #{inid} ORDER BY createdate DESC")
     @Results({
             @Result(id=true,column="id",property="id"),
             @Result(column="uid",property="uid"),

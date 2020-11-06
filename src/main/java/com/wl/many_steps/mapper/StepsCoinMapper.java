@@ -33,9 +33,9 @@ public interface StepsCoinMapper {
     @Select("SELECT COALESCE(SUM(coin),0) AS coin FROM stepscoin WHERE uid= #{uid}")
     float sumCoin(@Param("uid")int uid);
 
-    @Select(" select * from stepscoin")
+    @Select(" select * from stepscoin ORDER BY createdate DESC")
     List<StepsCoin> list();
 
-    @Select(" select * from stepscoin where uid = #{uid}")
+    @Select(" select * from stepscoin where uid = #{uid} ORDER BY createdate DESC")
     List<StepsCoin> listByUser(int uid);
 }

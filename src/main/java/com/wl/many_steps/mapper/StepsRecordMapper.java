@@ -33,9 +33,9 @@ public interface StepsRecordMapper {
     @Select("select * from stepsrecord where uid= #{uid} and rundate= #{rundate} ")
     StepsRecord getByUidAndRundate(@Param("uid")int uid,@Param("rundate")String rundate);
 
-    @Select(" select * from stepsrecord")
+    @Select(" select * from stepsrecord ORDER BY createdate DESC")
     List<StepsRecord> list();
 
-    @Select(" select * from stepsrecord where uid = #{uid}")
+    @Select(" select * from stepsrecord where uid = #{uid} ORDER BY createdate DESC")
     List<StepsRecord> listByUser(int uid);
 }

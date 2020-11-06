@@ -22,4 +22,7 @@ public class PageBean {
     private int size;
 
     private int id;
+
+    //是否是APP端请求  默认是 0  APP为 1
+    private int isApp;
 }

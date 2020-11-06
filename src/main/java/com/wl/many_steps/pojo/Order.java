@@ -24,4 +24,6 @@ public class Order {
     private Product product;
 
     private User user;
+
+    private String distancedate;
 }

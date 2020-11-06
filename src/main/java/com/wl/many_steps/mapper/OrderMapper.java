@@ -30,7 +30,7 @@ public interface OrderMapper {
     @Update("update order_ set name=#{name} where id=#{id} ")
     int update(Order order);
 
-    @Select(" select * from order_ ")
+    @Select(" select * from order_ ORDER BY createdate DESC")
     @Results({
             @Result(id=true,column="id",property="id"),
             @Result(column="uid",property="uid"),
@@ -45,7 +45,7 @@ public interface OrderMapper {
     })
     List<Order> list();
 
-    @Select(" select * from order_ where uid= #{uid}")
+    @Select(" select * from order_ where uid= #{uid} ORDER BY createdate DESC")
     @Results({
             @Result(id=true,column="id",property="id"),
             @Result(column="uid",property="uid"),
@@ -61,7 +61,7 @@ public interface OrderMapper {
     List<Order> userList(int uid);
 
 
-    @Select(" select * from order_ where pid= #{pid}")
+    @Select(" select * from order_ where pid= #{pid} ORDER BY createdate DESC")
     @Results({
             @Result(id=true,column="id",property="id"),
             @Result(column="uid",property="uid"),

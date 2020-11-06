@@ -29,6 +29,6 @@ public interface AddressMapper {
     @Select("select * from address where uid= #{uid} ")
     Address getByUid(int uid);
 
-    @Select(" select * from address ")
+    @Select(" select * from address ORDER BY createdate DESC")
     List<Address> list();
 }
