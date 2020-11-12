@@ -10,10 +10,15 @@ import com.wl.many_steps.service.StepsCoinService;
 import com.wl.many_steps.service.UserService;
 import com.wl.many_steps.utils.DateUtils;
 import com.wl.many_steps.utils.RandomNumber;
+import org.apache.http.util.TextUtils;
+import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.constraints.Min;
 import java.util.List;
 
 /**
@@ -40,6 +45,34 @@ public class OrderController {
     @Autowired
     StepsCoinService stepsCoinService;
 
+
+    /**
+     * 添加商品
+     *
+     * @return
+     */
+    @RequestMapping(value = "/updateOrderNum", method = RequestMethod.POST)
+    public ApiResponse update(@NotBlank(message = "ordercode 不能为空")  String ordercode,
+                              @NotBlank(message = "couriernumber 不能为空") String couriernumber,
+                              @Min(value = 10, message = "status 不能小于10") int status) {
+
+        //查询是否存在相同名称商品
+        Order order = orderService.get(ordercode);
+        if (null == order) {
+            return ApiResponse.of(999, "该订单不存在", null);
+        }
+
+        order.setCouriernumber(couriernumber);
+        order.setCouriernumber(couriernumber);
+        order.setStatus(status);
+        order.setCreatedate(DateUtils.stampToDate(System.currentTimeMillis()));
+       int code = orderService.updata(order);
+
+        if (code==0){
+            return ApiResponse.of(999,"操作失败请重试",null);
+        }
+        return ApiResponse.ofSuccess(order);
+    }
 
     /**
      * 下单前 查询余额

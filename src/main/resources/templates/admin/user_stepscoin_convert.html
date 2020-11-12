@@ -27,7 +27,7 @@
                 list: function (start) {
                     var id = getUrlParms("id");
                     var name = getUrlParms("name");
-                    var url = "../steps/userinfo/stepsCoinConvert"
+                    var url = "../steps/userinfo/coinRecord"
                     axios.post(url, {page: start, size: 10,id:id}).then(function (response) {
                         // var jsonObject = response.data.data;
                         // var jsonString = JSON.stringify(jsonObject)
@@ -68,9 +68,8 @@
             <tr class="success">
                 <th>ID</th>
                 <th>用户</th>
-                <th>步数</th>
-                <th>运动日期</th>
-                <th>转换步数</th>
+                <th>交易描述</th>
+                <th>交易金额</th>
                 <th>创建时间</th>
             </tr>
             </thead>
@@ -78,9 +77,8 @@
             <tr v-for="bean in beans ">
                 <td>{{bean.id}}</td>
                 <td>{{username}}</td>
+                <td>{{bean.tran_desc}}</td>
                 <td>{{bean.coin}}</td>
-                <td>{{bean.rundate}}</td>
-                <td>{{bean.convertsteps}}</td>
                 <td>{{bean.createdate}}</td>
             </tr>
             </tbody>

@@ -24,11 +24,11 @@ public interface OrderMapper {
     @Delete(" delete from order_ where ordercode= #{ordercode} ")
     int deleteByOrderCode(String code);
 
-    @Select("select * from order_ where id= #{id} ")
-    Order get(int id);
+    @Select("select * from order_ where ordercode= #{ordercode} ")
+    Order get(@Param("ordercode")String ordercode);
 
-    @Update("update order_ set name=#{name} where id=#{id} ")
-    int update(Order order);
+    @Update("update order_ set status=#{order.status},couriernumber=#{order.couriernumber},createdate=#{order.createdate} where ordercode=#{order.ordercode} ")
+    int update(@Param("order")Order order);
 
     @Select(" select * from order_ ORDER BY createdate DESC")
     @Results({

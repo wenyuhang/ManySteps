@@ -55,8 +55,26 @@
                         vue.beans = response.data.data.list;
                     })
                 },
+                //编辑快递单号
+                addCourierNumber:function(code){
+                    let name = prompt("请输入快递单号","")
+                    if (!checkNumber(name, "请检查快递单号必须为纯数字"))
+                        return;
+                    let url = "../steps/order/updateOrderNum"
+                    let data = new FormData();
+                    data.append("ordercode", code);
+                    data.append("couriernumber", name);
+                    data.append("status", 20);
+                    axios.post(url,data).then(function(response){
+                        alert(response.data.message);
+                        if (200 == response.data.code) {
+                            //刷新列表
+                            vue.list(vue.pagination.pageNum);
+                        }
+                    })
+                },
                 jump: function(page){
-                    jump(page,vue); //
+                    jump(page,vue);
                 },
                 jumpByNumber: function(start){
                     jumpByNumber(start,vue);
@@ -101,14 +119,18 @@
                 <td>{{bean.id}}</td>
                 <td>{{bean.ordercode}}</td>
                 <td>{{bean.couriernumber}}</td>
-                <td>{{bean.status}}</td>
+
+                <td v-if="bean.status == 10">待兑换</td>
+                <td v-else-if="bean.status == 20">已发货</td>
+                <td v-else>已完成</td>
+
                 <td>{{bean.product.coin}}</td>
                 <td>{{bean.product.price}}</td>
                 <td>1</td>
                 <td>{{bean.user.name}}</td>
                 <td>{{bean.createdate}}</td>
                 <td>
-                    <button>编辑快递单号</button>
+                    <input  type="button" @click="addCourierNumber(bean.ordercode)" value="编辑快递单号"/>
                 </td>
 
             </tr>
@@ -117,6 +139,7 @@
     </div>
 
     <div th:replace="include/adminPage::html" ></div>
+
 
 </div>
 

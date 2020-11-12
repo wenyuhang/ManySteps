@@ -2,6 +2,8 @@ package com.wl.many_steps.service;
 
 import com.wl.many_steps.mapper.OrderMapper;
 import com.wl.many_steps.pojo.Order;
+import com.wl.many_steps.pojo.Product;
+import org.apache.http.util.TextUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,6 +36,32 @@ public class OrderService {
      */
     public int deleteByOrderCode(String ordercode){
         return orderMapper.deleteByOrderCode(ordercode);
+    }
+
+    /**
+     * 修改订单状态
+     * @param order
+     * @return
+     */
+    public int updata(Order order){
+        return orderMapper.update(order);
+    }
+    /**
+     * 根据订单号获取订单
+     * @param ordercode
+     * @return
+     */
+    public Order get(String ordercode){
+        Order order = null;
+        try {
+            order = orderMapper.get(ordercode);
+            if (null==order|| TextUtils.isEmpty(order.getOrdercode())){
+                order = null;
+            }
+        }catch (Exception e){
+            order = null;
+        }
+        return order;
     }
 
     /**
