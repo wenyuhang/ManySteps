@@ -33,6 +33,6 @@ public interface ProductMapper {
     @Select("select * from product where name= #{name} ")
     Product getByName(String name);
 
-    @Select(" select * from product ")
+    @Select("SELECT * FROM product ORDER BY coin ASC")
     List<Product> list();
 }

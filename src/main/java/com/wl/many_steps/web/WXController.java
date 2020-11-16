@@ -8,6 +8,7 @@ import com.wl.many_steps.service.InviteRelaService;
 import com.wl.many_steps.service.StepsCoinService;
 import com.wl.many_steps.service.UserService;
 import com.wl.many_steps.utils.DateUtils;
+import com.wl.many_steps.utils.EmojiUtils;
 import com.wl.many_steps.utils.WXUtils;
 import org.apache.http.util.TextUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,6 +86,7 @@ public class WXController {
             }
             user = new User();
             String name = (String) userInfo.get("nickName");
+            name = EmojiUtils.filterName(name);
             user.setName(name);
             String avatarUrl = (String) userInfo.get("avatarUrl");
             user.setHeadimgurl(avatarUrl);
