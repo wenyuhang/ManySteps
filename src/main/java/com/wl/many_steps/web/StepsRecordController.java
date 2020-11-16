@@ -117,7 +117,12 @@ public class StepsRecordController {
             System.out.println("微信步数数据插入失败");
         }
 
-        return ApiResponse.ofSuccess(steps);
+        //注册用户超过1000奖励减半
+        if (userService.getUserCount() > 1000) {
+            return ApiResponse.of(200, "当前试运营阶段邀请好友可获得10金币奖励", steps);
+        } else {
+            return ApiResponse.of(200, "当前运营阶段邀请好友可获得20金币奖励", steps);
+        }
     }
 
     /**

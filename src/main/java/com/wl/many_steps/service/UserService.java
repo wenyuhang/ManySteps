@@ -84,6 +84,14 @@ public class UserService {
         return user;
     }
 
+    /**
+     * 获取用户注册数
+     * @return
+     */
+    public int getUserCount(){
+        return userMapper.getUserCount();
+    }
+
     public List<User> list(){
         List<User> list = userMapper.list();
         return list;

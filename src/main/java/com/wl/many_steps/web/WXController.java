@@ -111,8 +111,14 @@ public class WXController {
                 if (add == 0) {
                     System.out.println("绑定邀请关系操作失败");
                 } else {
-                    //发放奖励
-                    stepsCoinService.add(inviteUser.getId(), "邀请" + name + "奖励", 30, 0);
+                    //注册用户超过1000奖励减半
+                    if (userService.getUserCount()>1000){
+                        //发放奖励
+                        stepsCoinService.add(inviteUser.getId(), "邀请" + name + "奖励", 10, 0);
+                    }else {
+                        //发放奖励
+                        stepsCoinService.add(inviteUser.getId(), "邀请" + name + "奖励", 20, 0);
+                    }
                 }
             }
         }else {
