@@ -74,6 +74,15 @@ public class AdminController {
     }
 
     /**
+     * 订单管理
+     * @return
+     */
+    @RequestMapping("/admin_user_address")
+    public String toAddress(){
+        return "admin/address_manage";
+    }
+
+    /**
      * 用户步数记录
      * @return
      */

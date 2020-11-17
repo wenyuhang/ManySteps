@@ -1,0 +1,98 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="include/adminHeader::html">
+    <title>hello</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+</head>
+<body>
+<div th:replace="include/adminNavigator::html"></div>
+<script>
+    $(function () {
+        var data4Vue = {
+            bean: {},
+            pagination: {}
+        };
+
+        var vue = new Vue({
+            el: '#workingArea',
+            data: data4Vue,
+            mounted: function () {
+                this.get();
+            },
+            methods: {
+                // 查询用户收货地址信息
+                get: function () {
+                    var uid = getUrlParms("uid");
+                    var url = '../steps/userinfo/getAddress';
+
+                    axios.post(url, {id:uid}).then(function (response) {
+                        // var jsonObject = response.data.data;
+                        // var jsonString = JSON.stringify(jsonObject)
+                        // document.getElementById("hero").innerHTML = id+"通过 axios 获取到的json数据：" + jsonString;
+                        vue.bean = response.data.data;
+                    })
+                }
+
+            }
+        })
+
+
+    })
+
+
+</script>
+
+<div id="workingArea">
+    <!--<ol class="breadcrumb">-->
+    <!--<li><a href="admin_category_list"></a></li>-->
+    <!--<li><a :href="'admin_product_list?cid='+category.id">{{category.name}}</a></li>-->
+    <!--<li class="active"></li>-->
+    <!--</ol>-->
+
+    <div id="hero">
+
+    </div>
+    <div class="listDataTableDiv">
+        <table class="table table-striped table-bordered table-hover table-condensed">
+            <thead>
+            <tr class="success">
+                <th>ID</th>
+                <th>联系人信息</th>
+                <th>联系人手机号</th>
+
+                <th>省</th>
+                <th>市</th>
+                <th>区</th>
+
+                <th>收货地址</th>
+                <th>创建时间</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>{{bean.id}}</td>
+                <td>{{bean.receiver}}</td>
+                <td>{{bean.mobile}}</td>
+
+                <td>{{bean.province}}</td>
+                <td>{{bean.city}}</td>
+                <td>{{bean.area}}</td>
+
+                <td>{{bean.address}}</td>
+                <td>{{bean.createdate}}</td>
+
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!--<div th:replace="include/adminPage::html" ></div>-->
+
+
+</div>
+
+<div th:replace="include/adminFooter::html"></div>
+</body>
+
+</html>

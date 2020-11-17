@@ -6,6 +6,7 @@ import com.wl.many_steps.pojo.ReqIDBean;
 import com.wl.many_steps.pojo.User;
 import com.wl.many_steps.service.AddressService;
 import com.wl.many_steps.service.UserService;
+import com.wl.many_steps.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -48,7 +49,7 @@ public class AddressController {
             return ApiResponse.of(999,"收货地址已存在，请勿多次添加",null);
         }
         //添加收货地址
-        address.setCreatedate(String.valueOf(System.currentTimeMillis()));
+        address.setCreatedate(DateUtils.stampToDate(System.currentTimeMillis()));
         int code = addressService.add(address);
         if (code==0){
             return ApiResponse.of(999,"操作失败请重试",null);
@@ -83,7 +84,7 @@ public class AddressController {
             return ApiResponse.of(999,"参数错误请重试",null);
         }
         address = req;
-        address.setCreatedate(String.valueOf(System.currentTimeMillis()));
+        address.setCreatedate(DateUtils.stampToDate(System.currentTimeMillis()));
         int updata = addressService.updata(address);
         if (updata==0){
             return ApiResponse.of(999,"操作失败请重试",null);
