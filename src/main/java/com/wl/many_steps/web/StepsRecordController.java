@@ -93,13 +93,16 @@ public class StepsRecordController {
             }
         }
 
-        //检查是否超出限制  可转换步数超出2w步重置为2w
+        //检查是否超出限制  可转换步数超出2w步重置为上限2w
         if (canConvertSteps < stepsToday) {
-            stepsToday = canConvertSteps;
+//            stepsToday = canConvertSteps;
+            //计算可兑换步数
+            steps = canConvertSteps - convertedsteps;
+        }else {
+            //计算可兑换步数
+            steps = stepsToday - convertedsteps;
         }
 
-        //计算可兑换步数
-        steps = stepsToday - convertedsteps;
         //插入数据
         stepsRecord.setSteps(stepsToday);
         int code = 0;
@@ -145,7 +148,15 @@ public class StepsRecordController {
             return ApiResponse.of(999, "兑换金币出现问题，请退出重试", null);
         }
         //步数转换金币
-        int steps = stepsRecord.getSteps() - stepsRecord.getConvertedsteps();
+        int steps = 0;
+        int stepsToday = stepsRecord.getSteps();
+        //检查是否超出限制  可转换步数超出2w步重置为上限2w
+        if (canConvertSteps < stepsToday) {
+            steps = canConvertSteps - stepsRecord.getConvertedsteps();
+        }else {
+            steps = stepsToday - stepsRecord.getConvertedsteps();
+        }
+
         float coin = CoinUtils.calc(steps);
         int convertedsteps = stepsRecord.getConvertedsteps() + steps;
         stepsRecord.setConvertedsteps(convertedsteps);

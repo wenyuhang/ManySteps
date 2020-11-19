@@ -30,7 +30,7 @@ public class AdminController {
      */
     @PostMapping("/adminLogin")
     public String adminLogin(Model m,String name,String pwd){
-        if ("admin".equals(name)&&"123456".equals(pwd)){
+        if ("admin".equals(name)&&"jiang08.27.".equals(pwd)){
             return "redirect:admin_product_list";
         }else {
             return "admin/admin";
