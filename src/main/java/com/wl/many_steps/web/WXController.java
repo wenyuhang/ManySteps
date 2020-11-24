@@ -102,6 +102,12 @@ public class WXController {
             if (code == 0) {
                 return ApiResponse.of(999, "操作失败请重试", null);
             }
+            //补充昵称
+            if(TextUtils.isEmpty(name)){
+                name = "用户"+user.getId();
+                user.setName(name);
+                userService.update(user);
+            }
             //绑定邀请关系
             User inviteUser = userService.get(wxBean.getReferrer());
             if (null != inviteUser) {

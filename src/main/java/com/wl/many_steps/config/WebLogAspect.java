@@ -81,11 +81,11 @@ public class WebLogAspect {
         long startTime = System.currentTimeMillis();
         Object result = proceedingJoinPoint.proceed();
         // 打印出参
-        try {
-            logger.info("Response Args  : {}", JSONObject.toJSONString(result));
-        }catch (Exception e){
-            logger.info("Response Args  : {}", result);
-        }
+//        try {
+//            logger.info("Response Args  : {}", JSONObject.toJSONString(result));
+//        }catch (Exception e){
+//            logger.info("Response Args  : {}", result);
+//        }
         // 执行耗时
         logger.info("Time-Consuming : {} ms", System.currentTimeMillis() - startTime);
         return result;

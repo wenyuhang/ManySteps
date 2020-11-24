@@ -58,7 +58,7 @@
                 //编辑快递单号
                 addCourierNumber:function(code){
                     let name = prompt("请输入快递单号","")
-                    if (!checkNumber(name, "请检查快递单号必须为纯数字"))
+                    if (!checkEmpty(name, "快递单号"))
                         return;
                     let url = "../steps/order/updateOrderNum"
                     let data = new FormData();
