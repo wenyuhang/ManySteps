@@ -3,10 +3,7 @@ package com.wl.many_steps.web;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.wl.many_steps.model.ApiResponse;
-import com.wl.many_steps.pojo.InviteRela;
-import com.wl.many_steps.pojo.PageBean;
-import com.wl.many_steps.pojo.ReqIDBean;
-import com.wl.many_steps.pojo.User;
+import com.wl.many_steps.pojo.*;
 import com.wl.many_steps.service.InviteRelaService;
 import com.wl.many_steps.service.StepsCoinService;
 import com.wl.many_steps.service.StepsRecordService;
@@ -80,6 +77,10 @@ public class UserController {
         if (code==0){
             return ApiResponse.of(999,"操作失败，请稍后重试",null);
         }
+        int stepsRanking = userService.getUserStepsRanking(user.getId());
+        int inviteRanking = userService.getUserInviteRanking(user.getId());
+        user.setStepsRank(stepsRanking);
+        user.setInviteRank(inviteRanking);
         return ApiResponse.ofSuccess(user);
     }
 
@@ -95,6 +96,38 @@ public class UserController {
         List<InviteRela> list = inviteRelaService.getByInviteid(pageBean.getId());
         PageInfo pageInfo=new PageInfo(list);
         return ApiResponse.ofSuccess(pageInfo);
+    }
+
+    /**
+     * 获取步数排行榜
+     * @param pageBean
+     * @return
+     */
+    @PostMapping(value = "/getStepsRankList")
+    public ApiResponse getStepsRankList(@Validated @RequestBody PageBean pageBean){
+        PageHelper.startPage(pageBean.getPage(),pageBean.getSize());
+        List<User> list = userService.getStepsRankList();
+        int userRanking = userService.getUserStepsRanking(pageBean.getId());
+        RankListBean rankListBean = new RankListBean();
+        rankListBean.setRankList(list);
+        rankListBean.setUserRanking(userRanking);
+        return ApiResponse.ofSuccess(rankListBean);
+    }
+
+    /**
+     * 获取邀请排行榜
+     * @param pageBean
+     * @return
+     */
+    @PostMapping(value = "/getInviteRankList")
+    public ApiResponse getInviteRankList(@Validated @RequestBody PageBean pageBean){
+        PageHelper.startPage(pageBean.getPage(),pageBean.getSize());
+        List<User> list = userService.getInviteRankList();
+        int userRanking = userService.getUserInviteRanking(pageBean.getId());
+        RankListBean rankListBean = new RankListBean();
+        rankListBean.setRankList(list);
+        rankListBean.setUserRanking(userRanking);
+        return ApiResponse.ofSuccess(rankListBean);
     }
 
 }

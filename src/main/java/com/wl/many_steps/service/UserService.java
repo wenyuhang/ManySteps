@@ -92,8 +92,50 @@ public class UserService {
         return userMapper.getUserCount();
     }
 
+    /**
+     * 获取用户列表
+     * @return
+     */
     public List<User> list(){
         List<User> list = userMapper.list();
         return list;
+    }
+
+    /**
+     * 获取步数排行榜
+     * @return
+     */
+    public List<User> getStepsRankList(){
+        List<User> list = userMapper.stepsRankList();
+        return list;
+    }
+
+    /**
+     *  获取用户步数排位名次
+     * @param id
+     * @return
+     */
+    public int getUserStepsRanking(int id){
+        int userRanking = userMapper.getUserStepsRanking(id);
+        return userRanking;
+    }
+
+    /**
+     * 获取邀请排行榜
+     * @return
+     */
+    public List<User> getInviteRankList(){
+        List<User> list = userMapper.inviteRankList();
+        return list;
+    }
+
+    /**
+     * 获取用户邀请排位名字
+     * @param id
+     * @return
+     */
+    public int getUserInviteRanking(int id){
+        int userInviteRank = userMapper.getUserInviteRank(id);
+        return userInviteRank;
     }
 }

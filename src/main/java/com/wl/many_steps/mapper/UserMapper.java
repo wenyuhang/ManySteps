@@ -35,6 +35,18 @@ public interface UserMapper {
     @Select("SELECT COUNT(*) FROM user")
     int getUserCount();
 
-    @Select(" select * from user ORDER BY createdate DESC")
+    @Select("select * from user ORDER BY createdate DESC")
     List<User> list();
+
+    @Select("SELECT * FROM user ORDER BY steps_total DESC")
+    List<User> stepsRankList();
+
+    @Select("SELECT rowno FROM (SELECT id,steps_total,(@rowno:=@rowno+1) AS rowno FROM user,(SELECT (@rowno:=0)) b ORDER BY steps_total DESC) c WHERE id = #{id}")
+    int getUserStepsRanking(int id);
+
+    @Select("SELECT * FROM user ORDER BY invite_total DESC")
+    List<User> inviteRankList();
+
+    @Select("SELECT rowno FROM (SELECT id,invite_total,(@rowno:=@rowno+1) AS rowno FROM user,(SELECT (@rowno:=0)) b ORDER BY invite_total DESC) c WHERE id = #{id}")
+    int getUserInviteRank(int id);
 }

@@ -41,4 +41,8 @@ public class User {
     private int invite_total;
 
     private String createdate;
+
+    private int stepsRank;
+
+    private int inviteRank;
 }
