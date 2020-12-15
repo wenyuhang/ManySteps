@@ -38,10 +38,10 @@ public interface UserMapper {
     @Select("select * from user ORDER BY createdate DESC")
     List<User> list();
 
-    @Select("SELECT * FROM user ORDER BY steps_total DESC")
+    @Select("SELECT * FROM user where id!=390 ORDER BY steps_total DESC")
     List<User> stepsRankList();
 
-    @Select("SELECT rowno FROM (SELECT id,steps_total,(@rowno:=@rowno+1) AS rowno FROM user,(SELECT (@rowno:=0)) b ORDER BY steps_total DESC) c WHERE id = #{id}")
+    @Select("SELECT rowno FROM (SELECT id,steps_total,(@rowno:=@rowno+1) AS rowno FROM user,(SELECT (@rowno:=0)) b ORDER BY steps_total DESC) c WHERE id = #{id} AND id!=390")
     int getUserStepsRanking(int id);
 
     @Select("SELECT * FROM user ORDER BY invite_total DESC")

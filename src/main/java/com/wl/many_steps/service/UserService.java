@@ -116,7 +116,12 @@ public class UserService {
      * @return
      */
     public int getUserStepsRanking(int id){
-        int userRanking = userMapper.getUserStepsRanking(id);
+        int userRanking = 0;
+        try {
+            userRanking = userMapper.getUserStepsRanking(id);
+        }catch (Exception e){
+            userRanking = 0;
+        }
         return userRanking;
     }
 
@@ -134,8 +139,13 @@ public class UserService {
      * @param id
      * @return
      */
-    public int getUserInviteRanking(int id){
-        int userInviteRank = userMapper.getUserInviteRank(id);
+    public int getUserInviteRanking(int id) {
+        int userInviteRank = 0;
+        try {
+            userInviteRank = userMapper.getUserInviteRank(id);
+        } catch (Exception e) {
+            userInviteRank = 0;
+        }
         return userInviteRank;
     }
 }
