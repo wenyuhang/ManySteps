@@ -28,7 +28,7 @@ public interface UserMapper {
     User getByOpenid(String openid);
 
     @Update("update user set name=#{user.name},headimgurl=#{user.headimgurl},openid=#{user.openid},phone=#{user.phone},session_key=#{user.session_key}," +
-            "access_token=#{user.access_token},steps_total=#{user.steps_total},coin_total=#{user.coin_total},invite_total=#{user.invite_total}," +
+            "access_token=#{user.access_token},account_status=#{user.account_status},steps_total=#{user.steps_total},coin_total=#{user.coin_total},invite_total=#{user.invite_total}," +
             "createdate=#{user.createdate} where id=#{user.id}")
     int update(@Param("user") User user);
 
@@ -41,7 +41,7 @@ public interface UserMapper {
     @Select("SELECT * FROM user where id!=390 ORDER BY steps_total DESC")
     List<User> stepsRankList();
 
-    @Select("SELECT rowno FROM (SELECT id,steps_total,(@rowno:=@rowno+1) AS rowno FROM user,(SELECT (@rowno:=0)) b ORDER BY steps_total DESC) c WHERE id = #{id} AND id!=390")
+    @Select("SELECT rowno FROM (SELECT id,steps_total,(@rowno:=@rowno+1) AS rowno FROM user,(SELECT (@rowno:=0)) b where id!=390 ORDER BY steps_total DESC) c WHERE id = #{id}")
     int getUserStepsRanking(int id);
 
     @Select("SELECT * FROM user ORDER BY invite_total DESC")

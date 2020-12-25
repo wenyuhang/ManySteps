@@ -122,7 +122,7 @@ public class StepsRecordController {
 
         //注册用户超过1000奖励减半
         if (userService.getUserCount() > 1000) {
-            return ApiResponse.of(200, "当前试运营阶段邀请好友可获得10金币奖励", steps);
+            return ApiResponse.of(200, "当前运营阶段邀请好友可获得10金币奖励", steps);
         } else {
             return ApiResponse.of(200, "当前运营阶段邀请好友可获得20金币奖励", steps);
         }
@@ -181,6 +181,19 @@ public class StepsRecordController {
     public ApiResponse list(@Validated @RequestBody PageBean pageBean) {
         PageHelper.startPage(pageBean.getPage(), pageBean.getSize());
         List<StepsRecord> list = stepsRecordService.list(pageBean.getId());
+        PageInfo pageInfo = new PageInfo(list);
+        return ApiResponse.ofSuccess(pageInfo);
+    }
+
+    /**
+     * 获取监控警告
+     * @param pageBean
+     * @return
+     */
+    @PostMapping(value = "/getMonitorsData")
+    public ApiResponse getMonitorsData(@Validated @RequestBody PageBean pageBean){
+        PageHelper.startPage(pageBean.getPage(), pageBean.getSize());
+        List<StepsRecord> list = stepsRecordService.getMonitorsData();
         PageInfo pageInfo = new PageInfo(list);
         return ApiResponse.ofSuccess(pageInfo);
     }

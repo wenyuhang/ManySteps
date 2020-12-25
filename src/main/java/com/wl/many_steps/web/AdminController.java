@@ -74,7 +74,25 @@ public class AdminController {
     }
 
     /**
-     * 订单管理
+     * 监控管理 预警
+     * @return
+     */
+    @RequestMapping("/admin_monitors_list")
+    public String listMonitors(){
+        return "admin/monitors_manager";
+    }
+
+    /**
+     * 公告管理
+     * @return
+     */
+    @RequestMapping("/admin_notices_list")
+    public String listNotices(){
+        return "admin/notices_manager";
+    }
+
+    /**
+     * 地址管理
      * @return
      */
     @RequestMapping("/admin_user_address")

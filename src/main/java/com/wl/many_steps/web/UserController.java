@@ -4,18 +4,11 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.wl.many_steps.model.ApiResponse;
 import com.wl.many_steps.pojo.*;
-import com.wl.many_steps.service.InviteRelaService;
-import com.wl.many_steps.service.StepsCoinService;
-import com.wl.many_steps.service.StepsRecordService;
-import com.wl.many_steps.service.UserService;
-import org.apache.http.util.TextUtils;
-import org.aspectj.lang.annotation.Aspect;
-import org.hibernate.validator.constraints.NotBlank;
+import com.wl.many_steps.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.constraints.Max;
 import java.util.List;
 
 /**
@@ -37,6 +30,8 @@ public class UserController {
     StepsCoinService stepsCoinService;
     @Autowired
     StepsRecordService stepsRecordService;
+    @Autowired
+    NoticesRecordService noticesRecordService;
 
 
     /**
@@ -81,6 +76,16 @@ public class UserController {
         int inviteRanking = userService.getUserInviteRanking(user.getId());
         user.setStepsRank(stepsRanking);
         user.setInviteRank(inviteRanking);
+        //查询该用户是否有未读公告
+        boolean isHaveNotices = noticesRecordService.isHaveNotices(user.getId());
+        user.setHaveNotice(isHaveNotices);
+        //查询用户今日排名
+        int userTodayRank = stepsRecordService.getUserTodayRank(user.getId());
+        user.setUserTodayRank(userTodayRank);
+        //查询用户今日步数
+        int userTodaySteps = stepsRecordService.getUserTodaySteps(user.getId());
+        user.setUserTodaySteps(userTodaySteps);
+
         return ApiResponse.ofSuccess(user);
     }
 

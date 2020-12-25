@@ -25,12 +25,15 @@ public class User {
 
     private String openid;
 
+    @JsonBackReference
     private String unionid;
 
     @JsonBackReference
     private String session_key;
 
     private String access_token;
+
+    private String account_status;
 
     private String phone;
 
@@ -45,4 +48,10 @@ public class User {
     private int stepsRank;
 
     private int inviteRank;
+
+    private boolean isHaveNotice;
+
+    private int userTodayRank;
+
+    private int userTodaySteps;
 }

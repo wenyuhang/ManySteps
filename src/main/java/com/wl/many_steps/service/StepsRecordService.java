@@ -84,4 +84,43 @@ public class StepsRecordService{
         return stepsRecordMapper.listByUser(id);
     }
 
+    /**
+     * 获取存在刷步警告数据
+     * @return
+     */
+    public List<StepsRecord> getMonitorsData(){
+        return stepsRecordMapper.getMonitorsData();
+    }
+
+
+    /**
+     * 获取用户今日步数排名
+     * @param uid
+     * @return
+     */
+    public int getUserTodayRank(int uid){
+        int userRanking = 0;
+        try {
+            userRanking = stepsRecordMapper.getUserTodayRank(uid);
+        }catch (Exception e){
+            userRanking = 0;
+        }
+        return userRanking;
+    }
+
+    /**
+     * 获取用户今日的步数
+     * @param uid
+     * @return
+     */
+    public int getUserTodaySteps(int uid){
+        int steps = 0;
+        try {
+            steps = stepsRecordMapper.getUserTodaySteps(uid);
+        }catch (Exception e){
+            steps = 0;
+        }
+        return steps;
+    }
+
 }

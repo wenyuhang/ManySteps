@@ -25,4 +25,8 @@ public class StepsRecord {
     private int convertedsteps;
 
     private String createdate;
+
+    private int COUNT;
+
+    private User user;
 }

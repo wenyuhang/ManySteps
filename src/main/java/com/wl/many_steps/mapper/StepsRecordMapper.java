@@ -3,6 +3,7 @@ package com.wl.many_steps.mapper;
 
 import com.wl.many_steps.pojo.StepsRecord;
 import org.apache.ibatis.annotations.*;
+import org.apache.ibatis.mapping.FetchType;
 
 import java.util.List;
 
@@ -38,4 +39,22 @@ public interface StepsRecordMapper {
 
     @Select(" select * from stepsrecord where uid = #{uid} ORDER BY createdate DESC")
     List<StepsRecord> listByUser(int uid);
+
+    @Select("SELECT id,uid,steps,rundate,convertedsteps,createdate,COUNT(*) AS COUNT FROM stepsrecord WHERE steps>=0 GROUP BY steps,uid HAVING COUNT>1")
+    @Results({
+            @Result(id=true,column="id",property="id"),
+            @Result(column="uid",property="uid"),
+            @Result(column="steps",property="steps"),
+            @Result(column="rundate",property="rundate"),
+            @Result(column="convertedsteps",property="convertedsteps"),
+            @Result(column="createdate",property="createdate"),
+            @Result(column="uid",property="user",one=@One(select="com.wl.many_steps.mapper.UserMapper.get",fetchType= FetchType.EAGER))
+    })
+    List<StepsRecord> getMonitorsData();
+
+    @Select("SELECT rowno FROM (SELECT uid,steps,(@rowno:=@rowno+1) AS rowno FROM stepsrecord,(SELECT (@rowno:=0)) b WHERE TO_DAYS(createdate) = TO_DAYS(NOW()) AND id!=390 ORDER BY steps DESC) c WHERE uid = #{uid}")
+    int getUserTodayRank(@Param("uid")int uid);
+
+    @Select("SELECT steps FROM stepsrecord WHERE TO_DAYS(createdate) = TO_DAYS(NOW()) AND uid = #{uid}")
+    int getUserTodaySteps(@Param("uid")int uid);
 }
