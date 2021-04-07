@@ -90,11 +90,11 @@ public class WXController {
             user.setName(name);
             String avatarUrl = (String) userInfo.get("avatarUrl");
             user.setHeadimgurl(avatarUrl);
-            String openId = (String) userInfo.get("openId");
-            user.setOpenid(openId);
-            String unionId = (String) userInfo.get("unionId");
-            if (!TextUtils.isEmpty(unionId)) {
-                user.setUnionid(unionId);
+//            String openId = (String) userInfo.get("openId");
+            user.setOpenid(bean.getOpenid());
+//            String unionId = (String) userInfo.get("unionId");
+            if (!TextUtils.isEmpty(bean.getUnionid())) {
+                user.setUnionid(bean.getUnionid());
             }
             user.setCreatedate(DateUtils.stampToDate(System.currentTimeMillis()));
             user.setSession_key(session_key);

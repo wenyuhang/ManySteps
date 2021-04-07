@@ -40,7 +40,7 @@ public interface StepsRecordMapper {
     @Select(" select * from stepsrecord where uid = #{uid} ORDER BY createdate DESC")
     List<StepsRecord> listByUser(int uid);
 
-    @Select("SELECT id,uid,steps,rundate,convertedsteps,createdate,COUNT(*) AS COUNT FROM stepsrecord WHERE steps>=0 GROUP BY steps,uid HAVING COUNT>1")
+    @Select("SELECT id,uid,steps,rundate,convertedsteps,createdate,COUNT(*) AS COUNT FROM stepsrecord WHERE steps>0 GROUP BY steps,uid HAVING COUNT>1")
     @Results({
             @Result(id=true,column="id",property="id"),
             @Result(column="uid",property="uid"),
