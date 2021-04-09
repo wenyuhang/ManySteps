@@ -32,6 +32,8 @@ public class UserController {
     StepsRecordService stepsRecordService;
     @Autowired
     NoticesRecordService noticesRecordService;
+    @Autowired
+    VersionReviewService versionReviewService;
 
 
     /**
@@ -135,4 +137,13 @@ public class UserController {
         return ApiResponse.ofSuccess(rankListBean);
     }
 
+    /**
+     * 获取审核配置项
+     * @return
+     */
+    @PostMapping(value = "/getConfig")
+    public ApiResponse getConfig(){
+        VersionReview versionReview = versionReviewService.list();
+        return ApiResponse.ofSuccess(versionReview);
+    }
 }
